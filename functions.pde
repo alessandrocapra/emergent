@@ -43,7 +43,7 @@ class powerSpectrum {
     {
       if (i%3==0) {
         myPort.write(int(fft.getBand(i)*1000));
-        myPort.write("\n"); // let the arduino differentiate per channel, might not be needed.
+        myPort.write("\n"); // let the arduino differentiate per data point.
       }
     }
   }

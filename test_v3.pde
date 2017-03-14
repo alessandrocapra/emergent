@@ -4,7 +4,7 @@ import ddf.minim.analysis.*;
 import ddf.minim.*;
 import processing.serial.*;
 
-//create instance of class defined at the bottom
+//declare instance of class defined at the bottom
 powerSpectrum chan1;
 powerSpectrum chan2;
 powerSpectrum chan3;
