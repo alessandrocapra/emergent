@@ -1,0 +1,137 @@
+//this code will only work with an arduino attached to your computer!!! If you dont have acces to arduino, delete everything to do with serial (or comment out)
+//import libraries, probably you only need to install minim. Go to sketch --> import library and add library. Search for minim
+import ddf.minim.analysis.*;
+import ddf.minim.*;
+import processing.serial.*;
+
+//create instance of class defined at the bottom
+powerSpectrum chan1;
+powerSpectrum chan2;
+powerSpectrum chan3;
+powerSpectrum chan4;
+powerSpectrum chan5;
+powerSpectrum chan6;
+powerSpectrum chan7;
+powerSpectrum chan8;
+powerSpectrum chan9;
+powerSpectrum chan10;
+powerSpectrum chan11;
+powerSpectrum chan12;
+powerSpectrum chan13;
+powerSpectrum chan14;
+powerSpectrum chan15;
+powerSpectrum chan16;
+
+//create serial port
+Serial myPort;
+
+void setup() {
+  // just get the maximum framerate. 
+  frameRate(10000);
+
+  //screensettings
+  size(512, 720);
+  background(255);
+
+  //connect with arduino
+  printArray(Serial.list());
+  myPort = new Serial(this, Serial.list()[0], 115200);
+
+  //number indicates channel, used for visualization
+  chan1 = new powerSpectrum(1);
+  chan2 = new powerSpectrum(2);
+  chan3 = new powerSpectrum(3);
+  chan4 = new powerSpectrum(4);
+  chan5 = new powerSpectrum(5);
+  chan6 = new powerSpectrum(6);
+  chan7 = new powerSpectrum(7);
+  chan8 = new powerSpectrum(8);
+  chan9 = new powerSpectrum(9);
+  chan10 = new powerSpectrum(10);
+  chan11 = new powerSpectrum(11);
+  chan12 = new powerSpectrum(12);
+  chan13 = new powerSpectrum(13);
+  chan14 = new powerSpectrum(14);
+  chan15 = new powerSpectrum(15);
+  chan16 = new powerSpectrum(16);
+
+  //add music to each channel. This should be in the /data folder. 
+  chan1.input("/jazz/01_KickIn.mp3");
+  chan2.input("/jazz/02_KickOut.mp3");
+  chan3.input("/jazz/03_SnareUp.mp3");
+  chan4.input("/jazz/04_SnareDown.mp3");
+  chan5.input("/jazz/05_HiHat.mp3");
+  chan6.input("/jazz/06_Tom1.mp3");
+  chan7.input("/jazz/07_Tom2.mp3");
+  chan8.input("/jazz/08_Tom3.mp3");
+  chan9.input("/jazz/09_Overheads.mp3");
+  chan10.input("/jazz/10_BassMic.mp3");
+  chan11.input("/jazz/11_BassDI.mp3");
+  chan12.input("/jazz/12_PianoMics1.mp3");
+  chan13.input("/jazz/13_PianoMics2.mp3");
+  chan14.input("/jazz/14_Trumpet.mp3");
+  chan15.input("/jazz/15_Trombone.mp3");
+  chan16.input("/jazz/16_Saxophone.mp3");
+
+  //start everything (including play)
+  chan1.begin();
+  chan2.begin();
+  chan3.begin();
+  chan4.begin();
+  chan5.begin();
+  chan6.begin();
+  chan7.begin();
+  chan8.begin();
+  chan9.begin();
+  chan10.begin();
+  chan11.begin();
+  chan12.begin();
+  chan13.begin();
+  chan14.begin();
+  chan15.begin();
+  chan16.begin();
+}      
+
+void draw() {
+  //this is automatically looped. Tries to get to 10000x per second
+  background(255); //need to draw background everytime, since that makes you have a "clean" screen. comment out if you want to see what happens without it
+
+  //get the powerspectrum (fft) per channel
+  chan1.getSpectrum();
+  chan2.getSpectrum();
+  chan3.getSpectrum();
+  chan4.getSpectrum();
+  chan5.getSpectrum();
+  chan6.getSpectrum();
+  chan7.getSpectrum();
+  chan8.getSpectrum();
+  chan9.getSpectrum();
+  chan10.getSpectrum();
+  chan11.getSpectrum();
+  chan12.getSpectrum();
+  chan13.getSpectrum();
+  chan14.getSpectrum();
+  chan15.getSpectrum();
+  chan16.getSpectrum();
+
+  //send all the data. 
+  chan1.sendData();
+  chan2.sendData();
+  chan3.sendData();
+  chan4.sendData();
+  chan5.sendData();
+  chan6.sendData();
+  chan7.sendData();
+  chan8.sendData();
+  chan9.sendData();
+  chan10.sendData();
+  chan11.sendData();
+  chan12.sendData();
+  chan13.sendData();
+  chan14.sendData();
+  chan15.sendData();
+  chan16.sendData();
+
+  //monitor the speed of the program. Frames per second
+  println(frameRate);
+}
