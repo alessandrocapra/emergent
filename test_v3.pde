@@ -1,5 +1,5 @@
 //this code will only work with an arduino attached to your computer!!! If you dont have acces to arduino, delete everything to do with serial (or comment out)
-//import libraries, probably you only need to install minim. Go to sketch --> import library and add library. Search for minim
+//import libraries, probably you only need to install minim. Go to sketch -> import library and add library. Search for minim
 import ddf.minim.analysis.*;
 import ddf.minim.*;
 import processing.serial.*;
