@@ -93,22 +93,22 @@ void setup() {
   chan16 = new powerSpectrum(16);
 
   ////add music to each channel. This should be in the /data folder. 
-  chan1.input("../data/jazz/01_KickIn.mp3");
-  chan2.input("../data/jazz/02_KickOut.mp3");
-  chan3.input("../data/jazz/03_SnareUp.mp3");
-  chan4.input("../data/jazz/04_SnareDown.mp3");
-  chan5.input("../data/jazz/05_HiHat.mp3");
-  chan6.input("../data/jazz/06_Tom1.mp3");
-  chan7.input("../data/jazz/07_Tom2.mp3");
-  chan8.input("../data/jazz/08_Tom3.mp3");
-  chan9.input("../data/jazz/09_Overheads.mp3");
-  chan10.input("../data/jazz/10_BassMic.mp3");
-  chan11.input("../data/jazz/11_BassDI.mp3");
-  chan12.input("../data/jazz/12_PianoMics1.mp3");
-  chan13.input("../data/jazz/13_PianoMics2.mp3");
-  chan14.input("../data/jazz/14_Trumpet.mp3");
-  chan15.input("../data/jazz/15_Trombone.mp3");
-  chan16.input("../data/jazz/16_Saxophone.mp3");
+  chan1.input("/jazz/01_KickIn.mp3");
+  chan2.input("/jazz/02_KickOut.mp3");
+  chan3.input("/jazz/03_SnareUp.mp3");
+  chan4.input("/jazz/04_SnareDown.mp3");
+  chan5.input("/jazz/05_HiHat.mp3");
+  chan6.input("/jazz/06_Tom1.mp3");
+  chan7.input("/jazz/07_Tom2.mp3");
+  chan8.input("/jazz/08_Tom3.mp3");
+  chan9.input("/jazz/09_Overheads.mp3");
+  chan10.input("/jazz/10_BassMic.mp3");
+  chan11.input("/jazz/11_BassDI.mp3");
+  chan12.input("/jazz/12_PianoMics1.mp3");
+  chan13.input("/jazz/13_PianoMics2.mp3");
+  chan14.input("/jazz/14_Trumpet.mp3");
+  chan15.input("/jazz/15_Trombone.mp3");
+  chan16.input("/jazz/16_Saxophone.mp3");
 
   ////start everything (including play)
   chan1.begin();
