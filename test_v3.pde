@@ -30,7 +30,7 @@ int[] dataLoc = {2, 4, 8, 16, 32, 64, 128, 256};
 
 void setup() {
   // just get the maximum framerate. 
-  frameRate(10000);
+  frameRate(9.7);
 
   //screensettings
   size(512, 720);

@@ -54,6 +54,13 @@ class powerSpectrum {
     sum[i] += (fft.getBand(i) - sum[i]) * smooth_factor;
     line( i, height+chan*-45, i, height+chan*-45 - sum[i]*scale );
   }
+  
+  int mapData(int dataPoint){
+    int newData=dataPoint;
+   
+    
+    return newData;
+  }
 
   void addToBuffer() { 
     int n=0;
@@ -69,8 +76,10 @@ class powerSpectrum {
         }
 
         dataPoint=int(dataPoint/average);
+        dataPoint=mapData(dataPoint)
         dataBuffer[n+chan*8] = dataPoint;
-        println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint);
+      
+       println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint);
         n++;
         dataPoint=0;
       }
