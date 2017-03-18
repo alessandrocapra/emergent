@@ -38,7 +38,7 @@ void setup() {
 
   //connect with arduino
   printArray(Serial.list());
-  myPort = new Serial(this, Serial.list()[0], 115200);
+ // myPort = new Serial(this, Serial.list()[0], 115200);
 
   ////number indicates channel, used for visualization
   chan1 = new powerSpectrum(1);
@@ -98,7 +98,7 @@ void setup() {
 void draw() {
   //this is automatically looped. Tries to get to 10000x per second
   background(255); //need to draw background everytime, since that makes you have a "clean" screen. comment out if you want to see what happens without it 
-  myPort.write(1);
+//  myPort.write(1);
   drawDataLoc();
   //get the powerspectrum (fft) per channel
   chan1.getSpectrum();
@@ -136,7 +136,7 @@ void draw() {
   chan15.addToBuffer();
   chan16.addToBuffer();
 
-  sendData();
+  //sendData();
   //monitor the speed of the program. Frames per second
   //println(frameRate);
 }

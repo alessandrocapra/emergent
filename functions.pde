@@ -60,7 +60,7 @@ class powerSpectrum {
     int dataPoint=0;
     int average=8;
 
-    for (int i = 0; i < dataLoc[dataLoc.length-1]; i++)
+    for (int i = 0; i < dataLoc[dataLoc.length]-1; i++)
     {
       dataPoint= dataPoint+int(fft.getBand(i)*1000);
       if (i%dataLoc[n]==0) {
