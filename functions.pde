@@ -29,7 +29,7 @@ class powerSpectrum {
 
   powerSpectrum(int channel) {
     chan=channel-1;
-    minim = new Minim(test_v3.this);
+    minim = new Minim(emergent.this);
   }
 
   //input audio file and start the fft.
