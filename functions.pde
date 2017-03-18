@@ -1,14 +1,19 @@
 void sendData() {
-  for ( int i =0; i<data.length; i++) {
-    myPort.write(data[i]);
+  for ( int i =0; i<dataBuffer.length; i++) {
+    myPort.write(dataBuffer[i]);
     while (myPort.available() > 0) {
       int inByte = myPort.read();
-      println(inByte);
+      //     println(inByte);
     }
   }
-  println("new buffer");
+  //println("new buffer");
 }
 
+void drawDataLoc() {
+  for ( int i=0; i<dataLoc.length; i++) {
+    line(dataLoc[i],0,dataLoc[i],height);
+  }
+}
 
 class powerSpectrum {
   Minim       minim; 
@@ -53,13 +58,21 @@ class powerSpectrum {
   void addToBuffer() { 
     int n=0;
     int dataPoint=0;
-    for (int i = 0; i < fft.specSize(); i++)
+    int average=8;
+
+    for (int i = 0; i < dataLoc[dataLoc.length-1]; i++)
     {
       dataPoint= dataPoint+int(fft.getBand(i)*1000);
-      if (i%8==0) {
-        dataPoint=dataPoint/8;
-        data[n+chan*8] = dataPoint;
+      if (i%dataLoc[n]==0) {
+        if (n!=0) {
+          average=dataLoc[n]-dataLoc[n-1];
+        }
+
+        dataPoint=int(dataPoint/average);
+        dataBuffer[n+chan*8] = dataPoint;
+        println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint);
         n++;
+        dataPoint=0;
       }
     }
   }

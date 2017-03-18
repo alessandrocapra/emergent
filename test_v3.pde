@@ -25,7 +25,8 @@ powerSpectrum chan16;
 //create serial port
 Serial myPort;
 
-int[] data= new int[256];
+int[] dataBuffer = new int[256];
+int[] dataLoc = {2, 4, 8, 16, 32, 64, 128, 256};
 
 void setup() {
   // just get the maximum framerate. 
@@ -98,7 +99,7 @@ void draw() {
   //this is automatically looped. Tries to get to 10000x per second
   background(255); //need to draw background everytime, since that makes you have a "clean" screen. comment out if you want to see what happens without it 
   myPort.write(1);
-
+  drawDataLoc();
   //get the powerspectrum (fft) per channel
   chan1.getSpectrum();
   chan2.getSpectrum();
@@ -119,23 +120,21 @@ void draw() {
 
   chan1.addToBuffer();
   chan2.addToBuffer();  
-  //chan3.addToBuffer();
-  //chan4.addToBuffer();
-  //chan4.addToBuffer();
-  //chan5.addToBuffer();
-  //chan6.addToBuffer();
-  //chan7.addToBuffer();
-  //chan8.addToBuffer();
-  //chan9.addToBuffer();
-  //chan10.addToBuffer();
-  //chan11.addToBuffer();
-  //chan12.addToBuffer();
-  //chan13.addToBuffer();
-  //chan14.addToBuffer();
-  //chan15.addToBuffer();
-  //chan16.addToBuffer();
-
-
+  chan3.addToBuffer();
+  chan4.addToBuffer();
+  chan4.addToBuffer();
+  chan5.addToBuffer();
+  chan6.addToBuffer();
+  chan7.addToBuffer();
+  chan8.addToBuffer();
+  chan9.addToBuffer();
+  chan10.addToBuffer();
+  chan11.addToBuffer();
+  chan12.addToBuffer();
+  chan13.addToBuffer();
+  chan14.addToBuffer();
+  chan15.addToBuffer();
+  chan16.addToBuffer();
 
   sendData();
   //monitor the speed of the program. Frames per second
