@@ -25,6 +25,7 @@ class powerSpectrum {
   // for smoothing the data
   float[] sum = new float[bands];
   float smooth_factor = 0.2;
+  PrintWriter output = createWriter("positions.txt"); 
 
   powerSpectrum(int channel) {
     chan=channel-1;
@@ -76,10 +77,11 @@ class powerSpectrum {
         }
 
         dataPoint=int(dataPoint/average);
-        dataPoint=mapData(dataPoint)
+        dataPoint=mapData(dataPoint);
         dataBuffer[n+chan*8] = dataPoint;
       
        println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint);
+       output.println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint);
         n++;
         dataPoint=0;
       }
