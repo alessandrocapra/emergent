@@ -57,8 +57,11 @@ class powerSpectrum {
   
   int mapData(int dataPoint){
     int newData=dataPoint;
-   
     
+    if(dataPoint>1){  
+     newData=int(map(log(dataPoint),0, 11, 0, 256));
+    }
+      
     return newData;
   }
 
@@ -66,7 +69,8 @@ class powerSpectrum {
     int n=0;
     int dataPoint=0;
     int average=8;
-
+    int newDataPoint=0;
+    
     for (int i = 0; i <= dataLoc[dataLoc.length-1]; i++)
     {
       dataPoint= dataPoint+int(fft.getBand(i)*1000);
@@ -76,8 +80,8 @@ class powerSpectrum {
         }
 
         dataPoint=int(dataPoint/average);
-        dataPoint=mapData(dataPoint)
-        dataBuffer[n+chan*8] = dataPoint;
+        newDataPoint=mapData(dataPoint);
+        dataBuffer[n+chan*8] = newDataPoint;
       
        println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint);
         n++;
