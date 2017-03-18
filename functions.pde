@@ -1,3 +1,15 @@
+void sendData() {
+  for ( int i =0; i<data.length; i++) {
+    myPort.write(data[i]);
+    while (myPort.available() > 0) {
+      int inByte = myPort.read();
+      println(inByte);
+    }
+  }
+  println("new buffer");
+}
+
+
 class powerSpectrum {
   Minim       minim; 
   AudioPlayer audio;
@@ -38,12 +50,16 @@ class powerSpectrum {
     line( i, height+chan*-45, i, height+chan*-45 - sum[i]*scale );
   }
 
-  void sendData() {
-    for (int i = 0; i < fft.specSize()/3; i++)
+  void addToBuffer() { 
+    int n=0;
+    int dataPoint=0;
+    for (int i = 0; i < fft.specSize(); i++)
     {
-      if (i%3==0) {
-        myPort.write(int(fft.getBand(i)*1000));
-        myPort.write("\n"); // let the arduino differentiate per data point.
+      dataPoint= dataPoint+int(fft.getBand(i)*1000);
+      if (i%8==0) {
+        dataPoint=dataPoint/8;
+        data[n+chan*8] = dataPoint;
+        n++;
       }
     }
   }

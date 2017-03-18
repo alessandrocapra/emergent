@@ -25,6 +25,8 @@ powerSpectrum chan16;
 //create serial port
 Serial myPort;
 
+int[] data= new int[256];
+
 void setup() {
   // just get the maximum framerate. 
   frameRate(10000);
@@ -37,7 +39,7 @@ void setup() {
   printArray(Serial.list());
   myPort = new Serial(this, Serial.list()[0], 115200);
 
-  //number indicates channel, used for visualization
+  ////number indicates channel, used for visualization
   chan1 = new powerSpectrum(1);
   chan2 = new powerSpectrum(2);
   chan3 = new powerSpectrum(3);
@@ -55,7 +57,7 @@ void setup() {
   chan15 = new powerSpectrum(15);
   chan16 = new powerSpectrum(16);
 
-  //add music to each channel. This should be in the /data folder. 
+  ////add music to each channel. This should be in the /data folder. 
   chan1.input("/jazz/01_KickIn.mp3");
   chan2.input("/jazz/02_KickOut.mp3");
   chan3.input("/jazz/03_SnareUp.mp3");
@@ -73,7 +75,7 @@ void setup() {
   chan15.input("/jazz/15_Trombone.mp3");
   chan16.input("/jazz/16_Saxophone.mp3");
 
-  //start everything (including play)
+  ////start everything (including play)
   chan1.begin();
   chan2.begin();
   chan3.begin();
@@ -94,7 +96,8 @@ void setup() {
 
 void draw() {
   //this is automatically looped. Tries to get to 10000x per second
-  background(255); //need to draw background everytime, since that makes you have a "clean" screen. comment out if you want to see what happens without it
+  background(255); //need to draw background everytime, since that makes you have a "clean" screen. comment out if you want to see what happens without it 
+  myPort.write(1);
 
   //get the powerspectrum (fft) per channel
   chan1.getSpectrum();
@@ -114,24 +117,27 @@ void draw() {
   chan15.getSpectrum();
   chan16.getSpectrum();
 
-  //send all the data. 
-  chan1.sendData();
-  chan2.sendData();
-  chan3.sendData();
-  chan4.sendData();
-  chan5.sendData();
-  chan6.sendData();
-  chan7.sendData();
-  chan8.sendData();
-  chan9.sendData();
-  chan10.sendData();
-  chan11.sendData();
-  chan12.sendData();
-  chan13.sendData();
-  chan14.sendData();
-  chan15.sendData();
-  chan16.sendData();
+  chan1.addToBuffer();
+  chan2.addToBuffer();  
+  //chan3.addToBuffer();
+  //chan4.addToBuffer();
+  //chan4.addToBuffer();
+  //chan5.addToBuffer();
+  //chan6.addToBuffer();
+  //chan7.addToBuffer();
+  //chan8.addToBuffer();
+  //chan9.addToBuffer();
+  //chan10.addToBuffer();
+  //chan11.addToBuffer();
+  //chan12.addToBuffer();
+  //chan13.addToBuffer();
+  //chan14.addToBuffer();
+  //chan15.addToBuffer();
+  //chan16.addToBuffer();
 
+
+
+  sendData();
   //monitor the speed of the program. Frames per second
-  println(frameRate);
+  //println(frameRate);
 }
