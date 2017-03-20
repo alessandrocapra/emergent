@@ -90,5 +90,5 @@ void draw() {
   //sendData();
   
   //monitor the speed of the program. Frames per second
-  //println(frameRate);
+  println(frameRate);
 }

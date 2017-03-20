@@ -182,7 +182,7 @@ class powerSpectrum {
         newDataPoint=mapData(dataPoint);
         dataBuffer[n+chan*8] = newDataPoint;
 
-        println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint+"\t"+newDataPoint);
+ //       println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint+"\t"+newDataPoint);
         output.println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint+"\t"+newDataPoint);
 
         n++;
