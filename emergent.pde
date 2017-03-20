@@ -25,10 +25,11 @@ powerSpectrum chan16;
 //create serial port
 Serial myPort;
 
+/*-------------------------------------------------------------Variables for data visualization------------------------------------------------------------------------*/
 Minim minim_viz;
 AudioPlayer song_viz;
 FFT fft_viz;
-/*-------------------------------------------------------------Variables for data visualizatoin------------------------------------------------------------------------*/
+
 // Variables qui définissent les "zones" du spectre
 // Par exemple, pour les basses, on prend seulement les premières 4% du spectre total
 float specLow = 0.03; // 3%
@@ -63,62 +64,31 @@ Mur[] murs;
 
 void setup() {
   fullScreen(P3D);
-  
+
   //all setup needed for the visualization. See Visualization tab. 
   setup_viz();
- 
+
   //connect with arduino commit in the myPort line if arduino is connected
   printArray(Serial.list());
- // myPort = new Serial(this, Serial.list()[0], 115200);
+  // myPort = new Serial(this, Serial.list()[0], 115200);
 
   //all setup needed for the data analyses per channel. 
   setupChannels();
 }      
 
 void draw() {
-  //this is automatically looped. Tries to get to 10000x per second
-
-  background(255); //need to draw background everytime, since that makes you have a "clean" screen. comment out if you want to see what happens without it
-  draw_viz();
+  //this is automatically looped.
   
-  //drawDataLoc();
-  //get the powerspectrum (fft) per channel
-  chan1.getSpectrum();
-  chan2.getSpectrum();
-  chan3.getSpectrum();
-  chan4.getSpectrum();
-  chan5.getSpectrum();
-  chan6.getSpectrum();
-  chan7.getSpectrum();
-  chan8.getSpectrum();
-  chan9.getSpectrum();
-  chan10.getSpectrum();
-  chan11.getSpectrum();
-  chan12.getSpectrum();
-  chan13.getSpectrum();
-  chan14.getSpectrum();
-  chan15.getSpectrum();
-  chan16.getSpectrum();
+  draw_viz();
 
-  chan1.addToBuffer();
-  chan2.addToBuffer();  
-  chan3.addToBuffer();
-  chan4.addToBuffer();
-  chan4.addToBuffer();
-  chan5.addToBuffer();
-  chan6.addToBuffer();
-  chan7.addToBuffer();
-  chan8.addToBuffer();
-  chan9.addToBuffer();
-  chan10.addToBuffer();
-  chan11.addToBuffer();
-  chan12.addToBuffer();
-  chan13.addToBuffer();
-  chan14.addToBuffer();
-  chan15.addToBuffer();
-  chan16.addToBuffer();
+  //drawDataLoc();
+  
+  analyzeSpectra(); 
+
+  addToBuffer();
 
   //sendData();
+  
   //monitor the speed of the program. Frames per second
   //println(frameRate);
 }

@@ -73,6 +73,46 @@ void setupChannels() {
   chan16.begin();
 }
 
+void analyzeSpectra() {
+  //get the powerspectrum (fft) per channel
+  chan1.getSpectrum();
+  chan2.getSpectrum();
+  chan3.getSpectrum();
+  chan4.getSpectrum();
+  chan5.getSpectrum();
+  chan6.getSpectrum();
+  chan7.getSpectrum();
+  chan8.getSpectrum();
+  chan9.getSpectrum();
+  chan10.getSpectrum();
+  chan11.getSpectrum();
+  chan12.getSpectrum();
+  chan13.getSpectrum();
+  chan14.getSpectrum();
+  chan15.getSpectrum();
+  chan16.getSpectrum();
+}
+
+void addToBuffer() {
+  chan1.addToBuffer();
+  chan2.addToBuffer();  
+  chan3.addToBuffer();
+  chan4.addToBuffer();
+  chan4.addToBuffer();
+  chan5.addToBuffer();
+  chan6.addToBuffer();
+  chan7.addToBuffer();
+  chan8.addToBuffer();
+  chan9.addToBuffer();
+  chan10.addToBuffer();
+  chan11.addToBuffer();
+  chan12.addToBuffer();
+  chan13.addToBuffer();
+  chan14.addToBuffer();
+  chan15.addToBuffer();
+  chan16.addToBuffer();
+}
+
 class powerSpectrum {
   Minim       minim; 
   AudioPlayer audio;
@@ -141,8 +181,6 @@ class powerSpectrum {
         dataPoint=int(dataPoint/average);
         newDataPoint=mapData(dataPoint);
         dataBuffer[n+chan*8] = newDataPoint;
-
-
 
         println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint+"\t"+newDataPoint);
         output.println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint+"\t"+newDataPoint);
