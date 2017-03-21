@@ -145,7 +145,7 @@ class powerSpectrum {
     fft.forward(audio.mix);
     for (int i = 0; i < fft.specSize(); i++)
     {
-      //visualize_spectrums(i);
+      visualize_spectrums(i);
     }
   }
 
