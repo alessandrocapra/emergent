@@ -73,7 +73,7 @@ void setup() {
   // myPort = new Serial(this, Serial.list()[0], 115200);
 
   //all setup needed for the data analyses per channel. 
-  setupChannels();
+  //setupChannels();
 }      
 
 void draw() {
@@ -83,9 +83,9 @@ void draw() {
 
   //drawDataLoc();
   
-  analyzeSpectra(); 
+  //analyzeSpectra(); 
 
-  addToBuffer();
+  //addToBuffer();
 
   //sendData();
   
