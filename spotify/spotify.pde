@@ -40,10 +40,31 @@ void setup(){
   
   // Second, retrieve the song data
   
+  // Variables we're interested in saving from the JSON
+  float tempo;
+  float energy;
+  int key;
+  float loudness;
+  int mode;
+  float valence;
+  
+  // POST request
   GetRequest getSongData = new GetRequest(requestSong + "756CJtQRFSxEx9jV4P9hpA");
   getSongData.addHeader("Authorization", "Bearer " + newToken);
   getSongData.send();
-  
   println("Response Content: " + getSongData.getContent());
+  
+  // save whatever data we want from the JSON
+  JSONObject jsonSong = parseJSONObject(getSongData.getContent());
+  if (jsonSong == null) {
+    println("JSONObject could not be parsed");
+  } else {
+    tempo = jsonSong.getFloat("tempo");
+    energy = jsonSong.getFloat("energy");
+    key = jsonSong.getInt("key");
+    loudness = jsonSong.getFloat("loudness");
+    mode = jsonSong.getInt("mode");
+    valence = jsonSong.getFloat("valence");
+  }
   
 }
