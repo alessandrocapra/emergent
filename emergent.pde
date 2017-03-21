@@ -79,10 +79,10 @@ void setup() {
 void draw() {
   //this is automatically looped.
   
-  //draw_viz();
+  draw_viz();
   background(255);
   
-  drawDataLoc();
+  //drawDataLoc();
   analyzeSpectra(); 
   addToBuffer();
 
