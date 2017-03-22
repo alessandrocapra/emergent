@@ -13,7 +13,7 @@ String[][] songs = { //filename, spotifythingy
   {"../data/17 - Time.mp3", "6ZFbXIJkuI1dVNWvzJzown"}
 };
 
-int songID=2; //change for different songs
+int songID=0; //change for different songs
 
 // Client clientToken; 
 String data;
@@ -41,7 +41,7 @@ Minim minim;
 AudioPlayer song;
 FFT fft;
 
-int  r = 200;//orig=200
+float  r = 200;//orig=200
 float rad = 70;//orig=70
 
 int bands = 2048;
@@ -51,6 +51,8 @@ float smooth_factor = 0.2;
 float scale=2;
 color backgroundColor;
 
+float i = 0;
+float rotationSpeed;
 
 //----------------//
 float specLow = 0.03; // 3%
@@ -67,48 +69,21 @@ float oldScoreLow = scoreLow;
 float oldScoreMid = scoreMid;
 float oldScoreHi = scoreHi;
 
-// Valeur d'adoucissement
 float scoreDecreaseRate = 25;
-int nbMurs = 500;
-Mur[] murs;
-
 
 void setup() {
   fullScreen(P3D);
+  frameRate(30);
   setupVisualization();
   setupSpotify();
   getSpotifyData();
   println("danceability: "+ danceability+"\t"+"tempo: " + tempo+"\t"+"energy: "+energy+"\t"+"key: "+musicKey+"\t"+"loudness: " + loudness+"\t"+"mode: "+mode+"\t"+"valence: "+valence);
-  smooth_factor=1-valence;
+  smooth_factor=energy*valence;
   scale=scale*energy;
+  rotationSpeed=energy*tempo*loudness*valence;
   backgroundColor=color(255*valence, 255*valence, 255*valence);
-
-
-  // As many walls as you want
-  murs = new Mur[nbMurs];
-
-  // Create wall objects
-  // Left Walls
-  for (int i = 0; i < nbMurs; i+=4) {
-    murs[i] = new Mur(0, height/2, 10, height);
-  }
-
-  //right walls
-  for (int i = 1; i < nbMurs; i+=4) {
-    murs[i] = new Mur(width, height/2, 10, height);
-  }
-
-  //low walls
-  for (int i = 2; i < nbMurs; i+=4) {
-    murs[i] = new Mur(width/2, height, width, 10);
-  }
-
-  //high walls
-  for (int i = 3; i < nbMurs; i+=4) {
-    murs[i] = new Mur(width/2, 0, width, 10);
-  }
 }
 void draw() {
-  background(backgroundColor);
+  background(backgroundColor); //<---- we can change this base on something
   visualization();
 }
