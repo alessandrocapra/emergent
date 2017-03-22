@@ -1,8 +1,7 @@
 import processing.net.*;
 import ddf.minim.*;
 import ddf.minim.analysis.*;
-// Library for HTTP requests: https://github.com/runemadsen/HTTP-Requests-for-Processing
-import http.requests.*;
+import http.requests.*; // Library for HTTP requests: https://github.com/runemadsen/HTTP-Requests-for-Processing
 
 //song selection
 String[][] songs = { //filename, spotifythingy
@@ -69,7 +68,8 @@ float oldScoreLow = scoreLow;
 float oldScoreMid = scoreMid;
 float oldScoreHi = scoreHi;
 
-float scoreDecreaseRate = 25;
+float scoreGlobal;
+float scoreDecreaseRate = 5; //<------- not really a clue what this doest yet.
 
 void setup() {
   fullScreen(P3D);
@@ -78,12 +78,13 @@ void setup() {
   setupSpotify();
   getSpotifyData();
   println("danceability: "+ danceability+"\t"+"tempo: " + tempo+"\t"+"energy: "+energy+"\t"+"key: "+musicKey+"\t"+"loudness: " + loudness+"\t"+"mode: "+mode+"\t"+"valence: "+valence);
-  smooth_factor=energy*valence;
-  scale=scale*energy;
-  rotationSpeed=energy*tempo*loudness*valence;
+  smooth_factor=energy*valence; //<------------ has influence on the smoothness of the movements
+  scale=scale*energy; //<--------- has influence on the amplitude of the balls
   backgroundColor=color(255*valence, 255*valence, 255*valence);
 }
+
 void draw() {
-  background(backgroundColor); //<---- we can change this base on something
+  getScores();
+  background(backgroundColor); //<---- we can change this based on something
   visualization();
 }
