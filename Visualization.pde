@@ -5,8 +5,8 @@ void setup_viz()
   minim_viz = new Minim(this);
  
  // Load the song
-  song_viz = minim_viz.loadFile("data/sad.mp3");
-  
+
+  song_viz = minim_viz.loadFile("data/jazz/All.mp3");
 
 // Create the FFT object to analyze the song
   fft_viz = new FFT(song_viz.bufferSize(), song_viz.sampleRate());

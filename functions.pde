@@ -15,9 +15,7 @@ void drawDataLoc() {
   }
 }
 
-
 void setupChannels() {
-
   ////number indicates channel, used for visualization
   chan1 = new powerSpectrum(1);
   chan2 = new powerSpectrum(2);
@@ -120,6 +118,7 @@ class powerSpectrum {
   int chan;
   int scale = 2; //scale for visualization
   int bands = 1024; //should be n^2 for fft (512 or 1024 are good numbers
+  
   // for smoothing the data
   float[] sum = new float[bands];
   float smooth_factor = 0.2;
@@ -145,7 +144,7 @@ class powerSpectrum {
     fft.forward(audio.mix);
     for (int i = 0; i < fft.specSize(); i++)
     {
-      //visualize_spectrums(i);
+     // visualize_spectrums(i);
     }
   }
 
@@ -182,7 +181,7 @@ class powerSpectrum {
         newDataPoint=mapData(dataPoint);
         dataBuffer[n+chan*8] = newDataPoint;
 
- //       println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint+"\t"+newDataPoint);
+ //     println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint+"\t"+newDataPoint);
         output.println(n+"\t"+dataLoc[n]+"\t"+chan+"\t"+dataPoint+"\t"+newDataPoint);
 
         n++;
