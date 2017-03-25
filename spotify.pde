@@ -1,5 +1,5 @@
 void setupSpotify() {
-  String keys[] = loadStrings("KeyToken.txt");
+  String keys[] = loadStrings("data/KeyToken.txt");
   authorizationKey=keys[0];
   refreshToken=keys[1];
 
