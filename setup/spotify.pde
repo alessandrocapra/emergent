@@ -26,9 +26,10 @@ void setupSpotify() {
 
 void getSpotifyData() {
   // Second, retrieve the song data
-
+  //1jrFczYf5NysHccOQPXnNP
+  
   // POST request
-  GetRequest getSongData = new GetRequest(requestSong + "1jrFczYf5NysHccOQPXnNP");
+  GetRequest getSongData = new GetRequest(requestSong + songs[songID][1]);
   getSongData.addHeader("Authorization", "Bearer " + newToken);
   getSongData.send();
 //  println("Response Content: " + getSongData.getContent());
@@ -44,5 +45,6 @@ void getSpotifyData() {
     loudness = jsonSong.getFloat("loudness");
     mode = jsonSong.getInt("mode");
     valence = jsonSong.getFloat("valence");
+    danceability = jsonSong.getFloat("danceability");
   }
 }
