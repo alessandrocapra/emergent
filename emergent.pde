@@ -1,45 +1,62 @@
-//this code will only work with an arduino attached to your computer!!! If you dont have acces to arduino, delete everything to do with serial (or comment out)
-//import libraries, probably you only need to install minim. Go to sketch -> import library and add library. Search for minim
-import ddf.minim.analysis.*;
+import processing.net.*;
 import ddf.minim.*;
-import processing.serial.*;
+import ddf.minim.analysis.*;
+import http.requests.*; // Library for HTTP requests: https://github.com/runemadsen/HTTP-Requests-for-Processing
 
-/*----------------------------------------------------------Variables for data analysis---------------------------------------------------------------------------*/
-powerSpectrum chan1;
-powerSpectrum chan2;
-powerSpectrum chan3;
-powerSpectrum chan4;
-powerSpectrum chan5;
-powerSpectrum chan6;
-powerSpectrum chan7;
-powerSpectrum chan8;
-powerSpectrum chan9;
-powerSpectrum chan10;
-powerSpectrum chan11;
-powerSpectrum chan12;
-powerSpectrum chan13;
-powerSpectrum chan14;
-powerSpectrum chan15;
-powerSpectrum chan16;
+//song selection
+String[][] songs = { //filename, spotifythingy
+  {"../data/19 - Drink Up Me Hearties.mp3", "0HewdQ1l9bckQXPfIO3CYH"}, 
+  {"../data/05 - Elements.mp3", "1jrFczYf5NysHccOQPXnNP"}, 
+  {"../data/Coldplay - The Scientist .mp3", "75JFxkI2RXiU7L9VXzMkle"}, 
+  {"../data/07 Snow Patrol - Just Say Yes.mp3", "6JJobJT994GijrdaiRg4aB"}, 
+  {"../data/17 - Time.mp3", "6ZFbXIJkuI1dVNWvzJzown"}
+};
 
-//create serial port
-Serial myPort;
+int songID=0; //change for different songs
 
-/*-------------------------------------------------------------Variables for data visualization------------------------------------------------------------------------*/
-Minim minim_viz;
-AudioPlayer song_viz;
-FFT fft_viz;
+// Client clientToken; 
+String data;
+String newToken;
 
-// Variables qui définissent les "zones" du spectre
-// Par exemple, pour les basses, on prend seulement les premières 4% du spectre total
+// Keys to authorize the app through Spotify
+String authorizationKey;
+String refreshToken;
+
+String requestSong = "https://api.spotify.com/v1/audio-features/";
+JSONObject json;
+JSONObject jsonSong;
+
+// Variables we're interested in saving from the JSON
+float tempo;
+float energy;
+int musicKey;
+float loudness;
+int mode;
+float valence;
+float danceability;
+
+//Variable for visualization
+Minim minim;
+AudioPlayer song;
+FFT fft;
+
+float  r = 200;//orig=200
+float rad = 70;//orig=70
+
+int bands = 2048;
+
+float[] sum = new float[bands];
+float smooth_factor = 0.2;
+float scale=2;
+color backgroundColor;
+
+float i = 0;
+float rotationSpeed;
+
+//----------------//
 float specLow = 0.03; // 3%
 float specMid = 0.125;  // 12.5%
 float specHi = 0.20;   // 20%
-
-// Il reste donc 64% du spectre possible qui ne sera pas utilisé. 
-// Ces valeurs sont généralement trop hautes pour l'oreille humaine de toute facon.
-int[] dataBuffer = new int[256];
-int[] dataLoc = {2, 4, 8, 16, 32, 64, 128, 256};
 
 // Valeurs de score pour chaque zone
 float scoreLow = 0;
@@ -51,44 +68,23 @@ float oldScoreLow = scoreLow;
 float oldScoreMid = scoreMid;
 float oldScoreHi = scoreHi;
 
-// Valeur d'adoucissement
-float scoreDecreaseRate = 25;
-
-// Cubes qui apparaissent dans l'espace
-int nbCubes;
-Cube[] cubes;
-
-//Lignes qui apparaissent sur les cotés
-int nbMurs = 500;
-Mur[] murs;
+float scoreGlobal;
+float scoreDecreaseRate = 5; //<------- not really a clue what this doest yet.
 
 void setup() {
   fullScreen(P3D);
-
-  //all setup needed for the visualization. See Visualization tab. 
-  setup_viz();
-
-  //connect with arduino commit in the myPort line if arduino is connected
-  printArray(Serial.list());
-
-  // myPort = new Serial(this, Serial.list()[0], 115200);
-
-  //all setup needed for the data analyses per channel. 
-  setupChannels();
-}      
+  frameRate(30);
+  setupVisualization();
+  setupSpotify();
+  getSpotifyData();
+  println("danceability: "+ danceability+"\t"+"tempo: " + tempo+"\t"+"energy: "+energy+"\t"+"key: "+musicKey+"\t"+"loudness: " + loudness+"\t"+"mode: "+mode+"\t"+"valence: "+valence);
+  smooth_factor=energy*valence; //<------------ has influence on the smoothness of the movements
+  scale=scale*energy; //<--------- has influence on the amplitude of the balls
+  backgroundColor=color(255*valence, 255*valence, 255*valence);
+}
 
 void draw() {
-  //this is automatically looped.
-  
-  draw_viz();
-  background(255);
-  
-  //drawDataLoc();
-  analyzeSpectra(); 
-  addToBuffer();
-
-  //sendData();
-  
-  //monitor the speed of the program. Frames per second
-  println(frameRate);
+  getScores();
+  background(backgroundColor); //<---- we can change this based on something
+  visualization();
 }
