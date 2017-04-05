@@ -39,7 +39,7 @@ int[] data = new int[5];
 
 void setup() {
   minim = new Minim(this);
-  song = minim.loadFile("without_countdown.mp3");
+  song = minim.loadFile("midterm_demo.mp3");
   fft = new FFT(song.bufferSize(), song.sampleRate()); 
   printArray(Serial.list());
 
