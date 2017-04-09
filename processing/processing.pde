@@ -71,9 +71,11 @@ void setup() {
   
   println(songs[10].getLocation());
   //println(songs[0].getUrl());
+  
+  songs[10].loadAndPlay();
  
   myPort = new Serial(this, Serial.list()[0], 115200);
-  song.play(0);
+  //song.play(0);
 }
 
 void draw() {
