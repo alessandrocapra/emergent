@@ -18,11 +18,11 @@ class AudioFile {
 
   // methods to use the audio file
   void startFFT() {
-    this.fft = new FFT(audio.bufferSize(), audio.sampleRate());
+    this.audio = minim.loadFile(dataPath + this.location, bands);
+    this.fft = new FFT(this.audio.bufferSize(), this.audio.sampleRate());
   }
 
   void loadAndPlay() {
-    this.audio = minim.loadFile(dataPath + this.location, bands);
     this.audio.play();
   }
 

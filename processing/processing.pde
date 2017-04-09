@@ -72,6 +72,7 @@ void setup() {
   println(songs[10].getLocation());
   //println(songs[0].getUrl());
   
+  songs[10].startFFT();
   songs[10].loadAndPlay();
  
   myPort = new Serial(this, Serial.list()[0], 115200);
@@ -79,6 +80,13 @@ void setup() {
 }
 
 void draw() {
+  
+  songs[10].fft.forward(songs[10].audio.mix);
+  
+  for(int i = 0; i < songs[10].fft.specSize()*specLow; i++){
+    println(songs[10].fft.getBand(i));
+  }
+ 
   //fft.forward(song.mix);
   
   //Calcul des "scores" (puissance) pour trois catégories de son
