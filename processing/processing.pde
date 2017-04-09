@@ -11,6 +11,7 @@ FFT fft;
 
 Serial myPort;
 
+<<<<<<< HEAD:processing/processing.pde
 //song selection
 String[][] songs = { //filename, spotifythingy
   {"data/01_KickIn.mp3", "none"},
@@ -23,6 +24,8 @@ String[][] songs = { //filename, spotifythingy
   {"data/09_Overheads.mp3", "none"}, 
 };
 
+=======
+>>>>>>> 23a9f297c4979fc633afdf5164b1b52741241144:processing/processing.pde
 // Variables qui définissent les "zones" du spectre
 // Par exemple, pour les basses, on prend seulement les premières 4% du spectre total
 float specVeryLow=0.02;
