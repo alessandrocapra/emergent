@@ -12,7 +12,7 @@ FFT fft;
 Serial myPort;
 
 // array of available songs
-AudioFile[] songs = new AudioFile[20];
+AudioFile[] songs = new AudioFile[17];
 
 // spotify urls to retrieve the data
 String beethoven = "3DNRdudZ2SstnDCVKFdXxG";
@@ -69,22 +69,45 @@ void setup() {
     //println(songs[j].getLocation());
   }
   
-  println(songs[10].getLocation());
+  //println(songs[10].getLocation());
   //println(songs[0].getUrl());
   
-  songs[10].startFFT();
-  songs[10].loadAndPlay();
+  println("Song list: \n");
+  for(int x = 0; x < songs.length; x++){
+    println("Position " + x + ": " + songs[x].getLocation());
+  }
+  
+  // prepare all songs' FFT
+  for(int i = 0; i < songs.length; i++){
+    songs[i].startFFT();
+  }
+  
+  // play all of 'em
+  for(int i = 0; i < songs.length; i++){
+    songs[i].play();
+  }
  
   myPort = new Serial(this, Serial.list()[0], 115200);
-  //song.play(0);
 }
 
 void draw() {
+ 
+  // move forward all songs' FFT
+  for(int i = 0; i < songs.length; i++){
+    songs[i].fft.forward(songs[i].audio.mix);
+  }
   
-  songs[10].fft.forward(songs[10].audio.mix);
+  //songs[2].fft.forward(songs[2].audio.mix);
   
-  for(int i = 0; i < songs[10].fft.specSize()*specLow; i++){
-    println(songs[10].fft.getBand(i));
+  // check if FFT is progressing
+  for(int j = 0; j < songs.length; j++){
+    println("Song --> " + songs[j].getLocation());
+   
+    for(int i = 0; i < songs[j].fft.specSize()*specLow; i++){
+      println(songs[i].fft.getBand(i));
+    }
+    
+    println('\n');
   }
  
   //fft.forward(song.mix);

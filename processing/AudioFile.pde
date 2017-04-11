@@ -22,16 +22,21 @@ class AudioFile {
     this.fft = new FFT(this.audio.bufferSize(), this.audio.sampleRate());
   }
 
-  void loadAndPlay() {
+  void play() {
     this.audio.play();
   }
 
-  void getSpectrum() {
-    fft.forward(audio.mix);
-    for (int i = 0; i < fft.specSize(); i++)
+  float getSpectrum() {
+    this.fft.forward(this.audio.mix);
+    for (int i = 0; i < fft.specSize()*specHi; i++)
     {
+      float val = (20*((float)Math.log10(fft.getBand(i)))*2); // * 2 --> dBscale?      
+      if (fft.getBand(i) == 0) {   val = -200;   }  // avoid log(0)
       
+      return val;
     }
+    
+    return 999.999;
   }
 
   // setters
