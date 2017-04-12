@@ -3,6 +3,7 @@ class AudioFile {
   private String location;
   private String spotifyUrl;
   String dataPath = "./data/jazz/";
+  ArrayList<FloatList> fftData;
 
   AudioPlayer audio;
   Minim minim;
@@ -14,6 +15,8 @@ class AudioFile {
     this.location = location;
     this.spotifyUrl = spotifyUrl;
     this.minim = new Minim(processing.this);
+    
+    this.fftData = new ArrayList<FloatList>();
   }
 
   // methods to use the audio file
@@ -26,17 +29,22 @@ class AudioFile {
     this.audio.play();
   }
 
-  float getSpectrum() {
-    this.fft.forward(this.audio.mix);
-    for (int i = 0; i < fft.specSize()*specHi; i++)
+  void getSpectrum() {
+    this.fft.forward(this.audio.mix); 
+    
+    // create new FloatList object to save this round of fft in the main list
+    FloatList fftValue = new FloatList();
+    
+    for (int i = 0; i < fft.specSize(); i++)
     {
       float val = (20*((float)Math.log10(fft.getBand(i)))*2); // * 2 --> dBscale?      
       if (fft.getBand(i) == 0) {   val = -200;   }  // avoid log(0)
       
-      return val;
+      fftValue.append(val);
+      //println(fftValue);
     }
     
-    return 999.999;
+    this.fftData.add(fftValue);
   }
 
   // setters
@@ -55,5 +63,9 @@ class AudioFile {
 
   String getUrl() {
     return this.spotifyUrl;
+  }
+  
+  ArrayList getFFTList(){
+    return this.fftData;
   }
 }

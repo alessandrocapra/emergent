@@ -72,10 +72,10 @@ void setup() {
   //println(songs[10].getLocation());
   //println(songs[0].getUrl());
   
-  println("Song list: \n");
-  for(int x = 0; x < songs.length; x++){
-    println("Position " + x + ": " + songs[x].getLocation());
-  }
+  //println("Song list: \n");
+  //for(int x = 0; x < songs.length; x++){
+  //  println("Position " + x + ": " + songs[x].getLocation());
+  //}
   
   // prepare all songs' FFT
   for(int i = 0; i < songs.length; i++){
@@ -94,20 +94,8 @@ void draw() {
  
   // move forward all songs' FFT
   for(int i = 0; i < songs.length; i++){
-    songs[i].fft.forward(songs[i].audio.mix);
-  }
-  
-  //songs[2].fft.forward(songs[2].audio.mix);
-  
-  // check if FFT is progressing
-  for(int j = 0; j < songs.length; j++){
-    println("Song --> " + songs[j].getLocation());
-   
-    for(int i = 0; i < songs[j].fft.specSize()*specLow; i++){
-      println(songs[i].fft.getBand(i));
-    }
-    
-    println('\n');
+    songs[i].getSpectrum();    
+    println("FFT: " + songs[i].getFFTList());
   }
  
   //fft.forward(song.mix);
