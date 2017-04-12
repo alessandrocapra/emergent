@@ -4,11 +4,6 @@ import ddf.minim.*;
 import ddf.minim.analysis.*;
 import http.requests.*; // Library for HTTP requests: https://github.com/runemadsen/HTTP-Requests-for-Processing
 
-
-Minim minim;
-AudioPlayer song;
-FFT fft;
-
 Serial myPort;
 
 // array of available songs
@@ -18,155 +13,68 @@ AudioFile[] songs = new AudioFile[17];
 String beethoven = "3DNRdudZ2SstnDCVKFdXxG";
 
 //song selection
-  //{"data/16_Saxophone.mp3"}, 
-
-
-// Variables qui définissent les "zones" du spectre
-// Par exemple, pour les basses, on prend seulement les premières 4% du spectre total
-float specLow = 0.03; // 3%
-float specMid = 0.125;  // 12.5%
-float specHi = 0.20;   // 20%
-
-// Valeurs de score pour chaque zone
-float scoreLow = 0;
-float scoreMid = 0;
-float scoreHi = 0;
-
-// Valeur précédentes, pour adoucir la reduction
-// float oldScoreLow = scoreLow;
-// float oldScoreMid = scoreMid;
-// float oldScoreHi = scoreHi;
-
-// Valeur d'adoucissement
-// float scoreDecreaseRate = 25;
-
-float[] dataStore = new float[5];
-int[] data = new int[5];
+//{"data/16_Saxophone.mp3"}, 
 
 // function to retrieve files from the data/jazz folder (change accordingly)
-String[] getAudioFilesList(){
+String[] getAudioFilesList() {
   java.io.File folder = new java.io.File(dataPath("jazz/"));
-  
+
   // return filenames in folder
   return folder.list();
 }
 
+int[] sendData;
+
 void setup() {
-  minim = new Minim(this);
+  frameRate(60);
   //song = minim.loadFile("midterm_demo.mp3");
   //fft = FFT(song.bufferSize(), song.sampleRate()); 
   //printArray(Serial.list());
   
+  sendData=new int[85]; //make this number of outputs. 
+  
   // load songs into array
   String[] files = getAudioFilesList();
-  
+
   // create songs array
-  for(int i = 0; i < files.length; i++){
+  for (int i = 0; i < files.length; i++) {
     songs[i] = new AudioFile(files[i], beethoven);
   }
-  
-  for(int j = 0; j < songs.length; j++){
+
+  for (int j = 0; j < songs.length; j++) {
     //println(songs[j].getLocation());
   }
-  
+
   //println(songs[10].getLocation());
   //println(songs[0].getUrl());
-  
+
   //println("Song list: \n");
   //for(int x = 0; x < songs.length; x++){
   //  println("Position " + x + ": " + songs[x].getLocation());
   //}
-  
+
   // prepare all songs' FFT
-  for(int i = 0; i < songs.length; i++){
+  for (int i = 0; i < songs.length; i++) {
     songs[i].startFFT();
   }
-  
+
   // play all of 'em
-  for(int i = 0; i < songs.length; i++){
+  for (int i = 0; i < songs.length; i++) {
     songs[i].play();
   }
- 
-  myPort = new Serial(this, Serial.list()[0], 115200);
+  // myPort = new Serial(this, Serial.list()[0], 115200);
 }
 
 void draw() {
- 
+
   // move forward all songs' FFT
-  for(int i = 0; i < songs.length; i++){
-    songs[i].getSpectrum();    
-    println("FFT: " + songs[i].getFFTList());
+  for (int i = 0; i < songs.length; i++) {
+    songs[i].getSpectrum();
   }
- 
-  //fft.forward(song.mix);
   
-  //Calcul des "scores" (puissance) pour trois catégories de son
-  //D'abord, sauvgarder les anciennes valeurs
-  //oldScoreVeryLow = scoreVeryLow;
-  //oldScoreLow = scoreLow;
-  //oldScoreMid = scoreMid;
-  //oldScoreHi = scoreHi;
-
-  //scoreVeryLow = 0;
-  //scoreLow = 0;
-  //scoreMid = 0;
-  //scoreHi = 0;
-
-  //for (int i = 0; i < fft.specSize()*specVeryLow; i++)
-  //{
-  //  scoreVeryLow += fft.getBand(i);
-  //}
-
-  //for (int i = (int)(fft.specSize()*specVeryLow); i < fft.specSize()*specLow; i++)
-  //{
-  //  scoreLow += fft.getBand(i);
-  //}
-
-  //for (int i = (int)(fft.specSize()*specLow); i < fft.specSize()*specMid; i++)
-  //{
-  //  scoreMid += fft.getBand(i);
-  //}
-
-  //for (int i = (int)(fft.specSize()*specMid); i < fft.specSize()*specHi; i++)
-  //{
-  //  scoreHi += fft.getBand(i);
-  //}
-
-  //Faire ralentir la descente.
-  //if (oldScoreVeryLow > scoreVeryLow) {
-  //  scoreVeryLow = oldScoreVeryLow - scoreDecreaseRate;
-  //}
+  for (int i = 0; i < songs.length; i++) {
+    sendData=songs[i].addData(); //<---still fix this into one long array. 
+  }
   
-  //if (oldScoreLow > scoreLow) {
-  //  scoreLow = oldScoreLow - scoreDecreaseRate;
-  //}
-
-  //if (oldScoreMid > scoreMid) {
-  //  scoreMid = oldScoreMid - scoreDecreaseRate;
-  //}
-
-  //if (oldScoreHi > scoreHi) {
-  //  scoreHi = oldScoreHi - scoreDecreaseRate;
-  //}
   
-  //float scoreGlobal = (scoreVeryLow + scoreLow + scoreMid + scoreHi)/4;
-
-  //dataStore[0]=log(sqrt(scoreVeryLow))/log(2);
-  //dataStore[1]=log(sqrt(scoreLow))/log(2);
-  //dataStore[2]=log(sqrt(scoreMid))/log(2);
-  //dataStore[3]=log(sqrt(scoreHi))/log(2);
-  //dataStore[4]=log(sqrt(scoreGlobal))/log(2);
-
-  //for (int i=0; i<dataStore.length; i++) {
-  //  if (dataStore[i]<0) {
-  //    dataStore[i]=0.0;
-  //  }
-  //  data[i]=int(map(dataStore[i], 0, 6, 0, 254));
-  //}  
-
-  //println(data);
-
-  //for (int i=0; i<data.length; i++) {
-  //  myPort.write(data[i]);
-  //}
 }

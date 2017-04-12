@@ -8,43 +8,112 @@ class AudioFile {
   AudioPlayer audio;
   Minim minim;
   FFT fft;
-  int bands = 1024;
+  int bands = 512;
 
   // constructor
   AudioFile(String location, String spotifyUrl) {
     this.location = location;
     this.spotifyUrl = spotifyUrl;
     this.minim = new Minim(processing.this);
-    
     this.fftData = new ArrayList<FloatList>();
   }
 
   // methods to use the audio file
-  void startFFT() {
-    this.audio = minim.loadFile(dataPath + this.location, bands);
-    this.fft = new FFT(this.audio.bufferSize(), this.audio.sampleRate());
-  }
 
   void play() {
     this.audio.play();
   }
 
+  void startFFT() {
+    this.audio = minim.loadFile(dataPath + this.location, bands);
+    this.fft = new FFT(this.audio.bufferSize(), this.audio.sampleRate());
+  }
+
+
   void getSpectrum() {
-    this.fft.forward(this.audio.mix); 
+    this.fft.forward(this.audio.mix);
+  }
+
+  int[] addData() {
+    float specVeryLow=0.01;
+    float specLow = 0.04; // 3%
+    float specMid = 0.125;  // 12.5%
+    float specHi = 0.20;   // 20%
+    float scoreVeryLow=0;
+    float scoreLow = 0;
+    float scoreMid = 0;
+    float scoreHi = 0;
+    float oldScoreVeryLow=scoreVeryLow;
+    float oldScoreLow = scoreLow;
+    float oldScoreMid = scoreMid;
+    float oldScoreHi = scoreHi;
+    float scoreDecreaseRate = 25;
+
+    int[] fftValue = new int[5];
+    float[] dataStore = new float[5];
     
-    // create new FloatList object to save this round of fft in the main list
-    FloatList fftValue = new FloatList();
-    
-    for (int i = 0; i < fft.specSize(); i++)
+    oldScoreVeryLow = scoreVeryLow;
+    oldScoreLow = scoreLow;
+    oldScoreMid = scoreMid;
+    oldScoreHi = scoreHi;
+
+    scoreVeryLow = 0;
+    scoreLow = 0;
+    scoreMid = 0;
+    scoreHi = 0;
+
+    for (int i = 0; i < fft.specSize()*specVeryLow; i++)
     {
-      float val = (20*((float)Math.log10(fft.getBand(i)))*2); // * 2 --> dBscale?      
-      if (fft.getBand(i) == 0) {   val = -200;   }  // avoid log(0)
-      
-      fftValue.append(val);
-      //println(fftValue);
+      scoreVeryLow += fft.getBand(i);
     }
-    
-    this.fftData.add(fftValue);
+
+    for (int i = (int)(fft.specSize()*specVeryLow); i < fft.specSize()*specLow; i++)
+    {
+      scoreLow += fft.getBand(i);
+    }
+
+    for (int i = (int)(fft.specSize()*specLow); i < fft.specSize()*specMid; i++)
+    {
+      scoreMid += fft.getBand(i);
+    }
+
+    for (int i = (int)(fft.specSize()*specMid); i < fft.specSize()*specHi; i++)
+    {
+      scoreHi += fft.getBand(i);
+    }
+
+    Faire ralentir la descente.
+      if (oldScoreVeryLow > scoreVeryLow) {
+      scoreVeryLow = oldScoreVeryLow - scoreDecreaseRate;
+    }
+
+    if (oldScoreLow > scoreLow) {
+      scoreLow = oldScoreLow - scoreDecreaseRate;
+    }
+
+    if (oldScoreMid > scoreMid) {
+      scoreMid = oldScoreMid - scoreDecreaseRate;
+    }
+
+    if (oldScoreHi > scoreHi) {
+      scoreHi = oldScoreHi - scoreDecreaseRate;
+    }
+
+    float scoreGlobal = (scoreVeryLow + scoreLow + scoreMid + scoreHi)/4;
+
+    dataStore[0]=log(sqrt(scoreVeryLow))/log(2);
+    dataStore[1]=log(sqrt(scoreLow))/log(2);
+    dataStore[2]=log(sqrt(scoreMid))/log(2);
+    dataStore[3]=log(sqrt(scoreHi))/log(2);
+    dataStore[4]=log(sqrt(scoreGlobal))/log(2);
+
+    for (int i=0; i<dataStore.length; i++) {
+      if (dataStore[i]<0) {
+        dataStore[i]=0.0;
+      }
+      fftValue[i]=int(map(dataStore[i], 0, 6, 0, 254));
+    }  
+    return fftValue;
   }
 
   // setters
@@ -63,9 +132,5 @@ class AudioFile {
 
   String getUrl() {
     return this.spotifyUrl;
-  }
-  
-  ArrayList getFFTList(){
-    return this.fftData;
   }
 }
