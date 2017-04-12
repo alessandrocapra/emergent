@@ -51,7 +51,7 @@ class AudioFile {
 
     int[] fftValue = new int[5];
     float[] dataStore = new float[5];
-    
+
     oldScoreVeryLow = scoreVeryLow;
     oldScoreLow = scoreLow;
     oldScoreMid = scoreMid;
@@ -81,9 +81,7 @@ class AudioFile {
     {
       scoreHi += fft.getBand(i);
     }
-
-    Faire ralentir la descente.
-      if (oldScoreVeryLow > scoreVeryLow) {
+    if (oldScoreVeryLow > scoreVeryLow) {
       scoreVeryLow = oldScoreVeryLow - scoreDecreaseRate;
     }
 

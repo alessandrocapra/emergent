@@ -7,7 +7,7 @@ import http.requests.*; // Library for HTTP requests: https://github.com/runemad
 Serial myPort;
 
 // array of available songs
-AudioFile[] songs = new AudioFile[17];
+AudioFile[] instruments = new AudioFile[17];
 
 // spotify urls to retrieve the data
 String beethoven = "3DNRdudZ2SstnDCVKFdXxG";
@@ -24,24 +24,25 @@ String[] getAudioFilesList() {
 }
 
 int[] sendData;
+int[] newData = new int[5];
 
 void setup() {
   frameRate(60);
   //song = minim.loadFile("midterm_demo.mp3");
   //fft = FFT(song.bufferSize(), song.sampleRate()); 
   //printArray(Serial.list());
-  
+
   sendData=new int[85]; //make this number of outputs. 
-  
+
   // load songs into array
   String[] files = getAudioFilesList();
 
   // create songs array
   for (int i = 0; i < files.length; i++) {
-    songs[i] = new AudioFile(files[i], beethoven);
+    instruments[i] = new AudioFile(files[i], beethoven);
   }
 
-  for (int j = 0; j < songs.length; j++) {
+  for (int j = 0; j < instruments.length; j++) {
     //println(songs[j].getLocation());
   }
 
@@ -54,13 +55,13 @@ void setup() {
   //}
 
   // prepare all songs' FFT
-  for (int i = 0; i < songs.length; i++) {
-    songs[i].startFFT();
+  for (int i = 0; i < instruments.length; i++) {
+    instruments[i].startFFT();
   }
 
   // play all of 'em
-  for (int i = 0; i < songs.length; i++) {
-    songs[i].play();
+  for (int i = 0; i < instruments.length; i++) {
+    instruments[i].play();
   }
   // myPort = new Serial(this, Serial.list()[0], 115200);
 }
@@ -68,13 +69,24 @@ void setup() {
 void draw() {
 
   // move forward all songs' FFT
-  for (int i = 0; i < songs.length; i++) {
-    songs[i].getSpectrum();
+  for (int i = 0; i < instruments.length; i++) {
+    instruments[i].getSpectrum();
+  }
+  delay(2);
+
+  for (int i = 0; i < instruments.length; i++) {
+    newData=instruments[i].addData(); //<---still fix this into one long array.
+    sendData[i*5+0]=newData[0];
+    sendData[i*5+1]=newData[1];
+    sendData[i*5+2]=newData[2];
+    sendData[i*5+3]=newData[3];
+    sendData[i*5+4]=newData[4];
   }
   
-  for (int i = 0; i < songs.length; i++) {
-    sendData=songs[i].addData(); //<---still fix this into one long array. 
+  for (int i=0; i<sendData.length; i++){
+   myPort.write(sendData[i]); 
   }
   
-  
+  println(sendData);
+  delay(2);
 }
