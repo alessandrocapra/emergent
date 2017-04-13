@@ -24,7 +24,7 @@ String[] getAudioFilesList(int folderNum) {
   return folder.list();
 }
 
-int[] sendData = new int[85]; //<--- change to number of outputs. 
+int[] sendData; //<--- change to number of outputs. 
 int[] newData = new int[5]; //<--- how many instances do we have per instrument? Is 5 good? Should this change?
 
 void setup() {
@@ -39,7 +39,11 @@ void setup() {
   // load songs from folder into an array
   String[] files = getAudioFilesList(0);
   
+  // Create as many instrument files as the number of audio files in the folder
   instruments = new AudioFile[files.length];
+  
+  // for the sendData array (global one), we want 5 elements for each instrument (veryLow, Low, Mid, Hi, global)
+  sendData = new int[files.length*5];
 
   // create a song for each file and put into array
   for (int i = 0; i < files.length; i++) {
