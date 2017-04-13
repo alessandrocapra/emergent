@@ -5,7 +5,7 @@ import ddf.minim.analysis.*;
 import http.requests.*; // Library for HTTP requests: https://github.com/runemadsen/HTTP-Requests-for-Processing
 
 Serial myPort;
-
+Server myServer;
 // array of available songs
 AudioFile[] instruments = new AudioFile[17];
 
@@ -64,6 +64,7 @@ void setup() {
     instruments[i].play();
   }
   // myPort = new Serial(this, Serial.list()[0], 115200);
+  myServer = new Server(this, 5204); 
 }
 
 void draw() {
@@ -85,6 +86,7 @@ void draw() {
   
   for (int i=0; i<sendData.length; i++){
    myPort.write(sendData[i]); 
+   myServer.write(sendData[i]); 
   }
   
   println(sendData);
