@@ -1,11 +1,13 @@
-import processing.net.*;
-import processing.serial.*;
-import ddf.minim.*;
-import ddf.minim.analysis.*;
+import processing.net.*; //communicate with unity
+import processing.serial.*; //communicate arduino
+import ddf.minim.*; //sound playing
+import ddf.minim.analysis.*; //sound analyses
 import http.requests.*; // Library for HTTP requests: https://github.com/runemadsen/HTTP-Requests-for-Processing
 
+//Connection to Arduino & Unity
 Serial myPort;
 Server myServer;
+
 // array of available songs
 AudioFile[] instruments = new AudioFile[17];
 
@@ -23,16 +25,11 @@ String[] getAudioFilesList() {
   return folder.list();
 }
 
-int[] sendData;
-int[] newData = new int[5];
+int[] sendData = new int[85]; //<--- change to number of outputs. 
+int[] newData = new int[5]; //<--- how many instances do we have per instrument? Is 5 good? Should this change?
 
 void setup() {
-  frameRate(60);
-  //song = minim.loadFile("midterm_demo.mp3");
-  //fft = FFT(song.bufferSize(), song.sampleRate()); 
-  //printArray(Serial.list());
-
-  sendData=new int[85]; //make this number of outputs. 
+  frameRate(600); //makes it as fast as possible
 
   // load songs into array
   String[] files = getAudioFilesList();
@@ -63,8 +60,9 @@ void setup() {
   for (int i = 0; i < instruments.length; i++) {
     instruments[i].play();
   }
+  //printArray(Serial.list());
   // myPort = new Serial(this, Serial.list()[0], 115200);
-  myServer = new Server(this, 5204); 
+  myServer = new Server(this, 5204);
 }
 
 void draw() {
@@ -73,22 +71,22 @@ void draw() {
   for (int i = 0; i < instruments.length; i++) {
     instruments[i].getSpectrum();
   }
-  delay(2);
+  delay(2); //some delay, otherwise things fuck up
 
-  for (int i = 0; i < instruments.length; i++) {
-    newData=instruments[i].addData(); //<---still fix this into one long array.
-    sendData[i*5+0]=newData[0];
+  for (int i = 0; i < instruments.length; i++) { //<--- can we do this in the class itself and save it into a global array?
+    newData=instruments[i].addData(); //things we get from each instrument
+    sendData[i*5+0]=newData[0]; //save it to one long array for sending 
     sendData[i*5+1]=newData[1];
     sendData[i*5+2]=newData[2];
     sendData[i*5+3]=newData[3];
     sendData[i*5+4]=newData[4];
   }
-  
-  for (int i=0; i<sendData.length; i++){
-   myPort.write(sendData[i]); 
-   myServer.write(sendData[i]); 
+
+  for (int i=0; i<sendData.length; i++) {
+    //  myPort.write(sendData[i]);  //send everything to the arduino
+    myServer.write(sendData[i]); //actually send all the data to the server
   }
-  
+
   println(sendData);
-  delay(2);
+  delay(2); //some delay, otherwise things fuck up
 }

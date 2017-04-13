@@ -1,5 +1,4 @@
 class AudioFile {
-
   private String location;
   private String spotifyUrl;
   String dataPath = "./data/jazz/";
@@ -29,16 +28,15 @@ class AudioFile {
     this.fft = new FFT(this.audio.bufferSize(), this.audio.sampleRate());
   }
 
-
   void getSpectrum() {
     this.fft.forward(this.audio.mix);
   }
 
   int[] addData() {
     float specVeryLow=0.01;
-    float specLow = 0.04; // 3%
-    float specMid = 0.125;  // 12.5%
-    float specHi = 0.20;   // 20%
+    float specLow = 0.04; //maybe initialize this when we intilize the instance? This is looped quite often now. 
+    float specMid = 0.125;
+    float specHi = 0.20;
     float scoreVeryLow=0;
     float scoreLow = 0;
     float scoreMid = 0;
@@ -97,9 +95,9 @@ class AudioFile {
       scoreHi = oldScoreHi - scoreDecreaseRate;
     }
 
-    float scoreGlobal = (scoreVeryLow + scoreLow + scoreMid + scoreHi)/4;
+    float scoreGlobal = (scoreVeryLow + scoreLow + scoreMid + scoreHi)/4; //alse this happens quite often, get the intialization outside the loop?
 
-    dataStore[0]=log(sqrt(scoreVeryLow))/log(2);
+    dataStore[0]=log(sqrt(scoreVeryLow))/log(2); //This and down probably could be done nicer without needing two arrays. 
     dataStore[1]=log(sqrt(scoreLow))/log(2);
     dataStore[2]=log(sqrt(scoreMid))/log(2);
     dataStore[3]=log(sqrt(scoreHi))/log(2);
