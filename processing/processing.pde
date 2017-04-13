@@ -9,47 +9,50 @@ Serial myPort;
 Server myServer;
 
 // array of available songs
-AudioFile[] instruments = new AudioFile[17];
+AudioFile[] instruments;
+
+// array of folders, so we can change the folder dinamically
+String[] folderNames;
 
 // spotify urls to retrieve the data
 String beethoven = "3DNRdudZ2SstnDCVKFdXxG";
 
-//song selection
-//{"data/16_Saxophone.mp3"}, 
-
 // function to retrieve files from the data/jazz folder (change accordingly)
-String[] getAudioFilesList() {
-  java.io.File folder = new java.io.File(dataPath("jazz/"));
-
+String[] getAudioFilesList(int folderNum) {
+  java.io.File folder = new java.io.File(dataPath(folderNames[folderNum]));
   // return filenames in folder
   return folder.list();
 }
 
-int[] sendData = new int[85]; //<--- change to number of outputs. 
+int[] sendData; //<--- change to number of outputs. 
 int[] newData = new int[5]; //<--- how many instances do we have per instrument? Is 5 good? Should this change?
 
 void setup() {
   frameRate(600); //makes it as fast as possible
+  
+  // start spotify and get refreshed token
+  setupSpotify();
+  
+  // set up which folders we add to load the songs
+  folderNames = new String[]{"jazz/"};
 
-  // load songs into array
-  String[] files = getAudioFilesList();
+  // load songs from folder into an array
+  String[] files = getAudioFilesList(0);
+  
+  // Create as many instrument files as the number of audio files in the folder
+  instruments = new AudioFile[files.length];
+  
+  // for the sendData array (global one), we want 5 elements for each instrument (veryLow, Low, Mid, Hi, global)
+  sendData = new int[files.length*5];
 
-  // create songs array
+  // create a song for each file and put into array
   for (int i = 0; i < files.length; i++) {
     instruments[i] = new AudioFile(files[i], beethoven);
   }
-
-  for (int j = 0; j < instruments.length; j++) {
-    //println(songs[j].getLocation());
-  }
-
-  //println(songs[10].getLocation());
-  //println(songs[0].getUrl());
-
-  //println("Song list: \n");
-  //for(int x = 0; x < songs.length; x++){
-  //  println("Position " + x + ": " + songs[x].getLocation());
-  //}
+  
+  // For this array, there are methods to get the data. Some examples:
+  //   instruments[i].getLocation(); --> get filename of the song
+  //   instruments[i].getUrl(); --> get spotify ID
 
   // prepare all songs' FFT
   for (int i = 0; i < instruments.length; i++) {
