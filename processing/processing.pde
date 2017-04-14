@@ -42,8 +42,8 @@ void setup() {
   // Create as many instrument files as the number of audio files in the folder
   instruments = new AudioFile[files.length];
   
-  // for the sendData array (global one), we want 5 elements for each instrument (veryLow, Low, Mid, Hi, global)
-  sendData = new int[files.length*5];
+  // for the sendData array (global one), we want 4 elements for each instrument (Low, Mid, Hi, global)
+  sendData = new int[files.length*4];
 
   // create a song for each file and put into array
   for (int i = 0; i < files.length; i++) {

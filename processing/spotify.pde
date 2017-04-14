@@ -16,7 +16,7 @@ JSONObject json;
 JSONObject jsonSong;
 
 void setupSpotify() {
-  String keys[] = loadStrings("data/KeyToken.txt");
+  String keys[] = loadStrings("data/keyToken.txt");
   authorizationKey=keys[0];
   refreshToken=keys[1];
 
