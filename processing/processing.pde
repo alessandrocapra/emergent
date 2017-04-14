@@ -34,10 +34,10 @@ void setup() {
   setupSpotify();
   
   // set up which folders we add to load the songs
-  folderNames = new String[]{"jazz/"};
+  folderNames = new String[]{"jazz/", "suspense/", "steampunk/", "adventure/"};
 
   // load songs from folder into an array
-  String[] files = getAudioFilesList(0);
+  String[] files = getAudioFilesList(3);
   
   // Create as many instrument files as the number of audio files in the folder
   instruments = new AudioFile[files.length];
@@ -78,11 +78,10 @@ void draw() {
 
   for (int i = 0; i < instruments.length; i++) { //<--- can we do this in the class itself and save it into a global array?
     newData=instruments[i].addData(); //things we get from each instrument
-    sendData[i*5+0]=newData[0]; //save it to one long array for sending 
-    sendData[i*5+1]=newData[1];
-    sendData[i*5+2]=newData[2];
-    sendData[i*5+3]=newData[3];
-    sendData[i*5+4]=newData[4];
+    sendData[i*4+0]=newData[0]; //save it to one long array for sending 
+    sendData[i*4+1]=newData[1];
+    sendData[i*4+2]=newData[2];
+    sendData[i*4+3]=newData[3];
   }
 
   for (int i=0; i<sendData.length; i++) {

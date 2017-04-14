@@ -1,8 +1,26 @@
 class AudioFile {
   private String location;
   private String spotifyUrl;
-  String dataPath = "./data/jazz/";
+  String dataPath = "./data/adventure/";
   ArrayList<FloatList> fftData;
+
+  float specLow = 0.03; //maybe initialize this when we intilize the instance? This is looped quite often now. 
+  float specMid = 0.125;
+  float specHi = 0.20;
+
+  float scoreLow = 0;
+  float scoreMid = 0;
+  float scoreHi = 0;
+  float scoreGlobal=0;
+  
+  float oldScoreLow = scoreLow;
+  float oldScoreMid = scoreMid;
+  float oldScoreHi = scoreHi;
+  float scoreDecreaseRate = 25;
+
+  int[] fftValue = new int[4];
+  float[] dataStore = new float[4];
+
 
   AudioPlayer audio;
   Minim minim;
@@ -33,39 +51,17 @@ class AudioFile {
   }
 
   int[] addData() {
-    float specVeryLow=0.01;
-    float specLow = 0.04; //maybe initialize this when we intilize the instance? This is looped quite often now. 
-    float specMid = 0.125;
-    float specHi = 0.20;
-    float scoreVeryLow=0;
-    float scoreLow = 0;
-    float scoreMid = 0;
-    float scoreHi = 0;
-    float oldScoreVeryLow=scoreVeryLow;
-    float oldScoreLow = scoreLow;
-    float oldScoreMid = scoreMid;
-    float oldScoreHi = scoreHi;
-    float scoreDecreaseRate = 25;
 
-    int[] fftValue = new int[5];
-    float[] dataStore = new float[5];
-
-    oldScoreVeryLow = scoreVeryLow;
     oldScoreLow = scoreLow;
     oldScoreMid = scoreMid;
     oldScoreHi = scoreHi;
 
-    scoreVeryLow = 0;
+
     scoreLow = 0;
     scoreMid = 0;
     scoreHi = 0;
 
-    for (int i = 0; i < fft.specSize()*specVeryLow; i++)
-    {
-      scoreVeryLow += fft.getBand(i);
-    }
-
-    for (int i = (int)(fft.specSize()*specVeryLow); i < fft.specSize()*specLow; i++)
+    for (int i = 0; i < fft.specSize()*specLow; i++)
     {
       scoreLow += fft.getBand(i);
     }
@@ -78,9 +74,6 @@ class AudioFile {
     for (int i = (int)(fft.specSize()*specMid); i < fft.specSize()*specHi; i++)
     {
       scoreHi += fft.getBand(i);
-    }
-    if (oldScoreVeryLow > scoreVeryLow) {
-      scoreVeryLow = oldScoreVeryLow - scoreDecreaseRate;
     }
 
     if (oldScoreLow > scoreLow) {
@@ -95,13 +88,13 @@ class AudioFile {
       scoreHi = oldScoreHi - scoreDecreaseRate;
     }
 
-    float scoreGlobal = (scoreVeryLow + scoreLow + scoreMid + scoreHi)/4; //alse this happens quite often, get the intialization outside the loop?
+    scoreGlobal = (scoreLow + scoreMid + scoreHi)/3; //alse this happens quite often, get the intialization outside the loop?
 
-    dataStore[0]=log(sqrt(scoreVeryLow))/log(2); //This and down probably could be done nicer without needing two arrays. 
-    dataStore[1]=log(sqrt(scoreLow))/log(2);
-    dataStore[2]=log(sqrt(scoreMid))/log(2);
-    dataStore[3]=log(sqrt(scoreHi))/log(2);
-    dataStore[4]=log(sqrt(scoreGlobal))/log(2);
+    //This and down probably could be done nicer without needing two arrays. 
+    dataStore[0]=log(sqrt(scoreLow))/log(2);
+    dataStore[1]=log(sqrt(scoreMid))/log(2);
+    dataStore[2]=log(sqrt(scoreHi))/log(2);
+    dataStore[3]=log(sqrt(scoreGlobal))/log(2);
 
     for (int i=0; i<dataStore.length; i++) {
       if (dataStore[i]<0) {
