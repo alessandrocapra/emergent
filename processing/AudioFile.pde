@@ -1,7 +1,7 @@
 class AudioFile {
   private String location;
   private String spotifyUrl;
-  String dataPath = "./data/adventure/";
+  String dataPath = "./data/adventure/"; //<--- we should make this dependend. 
   ArrayList<FloatList> fftData;
 
   float specLow = 0.03; //maybe initialize this when we intilize the instance? This is looped quite often now. 
