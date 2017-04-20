@@ -27,23 +27,43 @@ String[] getAudioFilesList(String folderStr) {
 int[] sendData; //<--- change to number of outputs. 
 int[] newData = new int[5]; //<--- how many instances do we have per instrument? Is 5 good? Should this change?
 
+int port = 5204;
+
 void setup() {
+
+  myServer = new Server(this, port);
+
   frameRate(600); //makes it as fast as possible
-  
+
   // start spotify and get refreshed token
   setupSpotify();
-  
+
   // set up which folders we add to load the songs
   folderNames = new String[]{"jazz/", "suspense/", "steampunk/", "adventure/"};
 
-  String song = folderNames[0];
+  // take data from server 
+  Client thisClient = myServer.available();
+  
+  while (thisClient == null) {
+    delay(10);
+    thisClient = myServer.available();
+    println("Client unavailable"+"\t"+millis());
+  }   
+
+  String whatClientSaid = thisClient.readString();
+  if (whatClientSaid != null) {
+    println(whatClientSaid);
+  } 
+  int test = Integer.parseInt(trim(whatClientSaid));
+  println(test);
+  String song = folderNames[test];
 
   // load songs from folder into an array
   String[] files = getAudioFilesList(song);
-  
+
   // Create as many instrument files as the number of audio files in the folder
   instruments = new AudioFile[files.length];
-  
+
   // for the sendData array (global one), we want 4 elements for each instrument (Low, Mid, Hi, global)
   sendData = new int[files.length*4];
 
@@ -51,7 +71,7 @@ void setup() {
   for (int i = 0; i < files.length; i++) {
     instruments[i] = new AudioFile(song + files[i], beethoven);
   }
-  
+
   // For this array, there are methods to get the data. Some examples:
   //   instruments[i].getLocation(); --> get filename of the song
   //   instruments[i].getUrl(); --> get spotify ID
@@ -67,7 +87,6 @@ void setup() {
   }
   //printArray(Serial.list());
   // myPort = new Serial(this, Serial.list()[0], 115200);
-  myServer = new Server(this, 5204);
 }
 
 void draw() {
