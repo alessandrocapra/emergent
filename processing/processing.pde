@@ -18,8 +18,8 @@ String[] folderNames;
 String beethoven = "3DNRdudZ2SstnDCVKFdXxG";
 
 // function to retrieve files from the data/jazz folder (change accordingly)
-String[] getAudioFilesList(int folderNum) {
-  java.io.File folder = new java.io.File(dataPath(folderNames[folderNum]));
+String[] getAudioFilesList(String folderStr) {
+  java.io.File folder = new java.io.File(dataPath(folderStr));
   // return filenames in folder
   return folder.list();
 }
@@ -36,8 +36,10 @@ void setup() {
   // set up which folders we add to load the songs
   folderNames = new String[]{"jazz/", "suspense/", "steampunk/", "adventure/"};
 
+  String song = folderNames[0];
+
   // load songs from folder into an array
-  String[] files = getAudioFilesList(3);
+  String[] files = getAudioFilesList(song);
   
   // Create as many instrument files as the number of audio files in the folder
   instruments = new AudioFile[files.length];
@@ -47,7 +49,7 @@ void setup() {
 
   // create a song for each file and put into array
   for (int i = 0; i < files.length; i++) {
-    instruments[i] = new AudioFile(files[i], beethoven);
+    instruments[i] = new AudioFile(song + files[i], beethoven);
   }
   
   // For this array, there are methods to get the data. Some examples:
