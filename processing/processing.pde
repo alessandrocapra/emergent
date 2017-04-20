@@ -39,7 +39,7 @@ void setup() {
   setupSpotify();
 
   // set up which folders we add to load the songs
-  folderNames = new String[]{"jazz/", "suspense/", "steampunk/", "adventure/"};
+  folderNames = new String[]{"acdc/", "suspense/", "steampunk/", "adventure/"};
 
   // take data from server 
   Client thisClient = myServer.available();
