@@ -11,11 +11,11 @@ class AudioFile {
   float scoreMid = 0;
   float scoreHi = 0;
   float scoreGlobal=0;
-  
+
   float oldScoreLow = scoreLow;
   float oldScoreMid = scoreMid;
   float oldScoreHi = scoreHi;
-  
+
   float scoreDecreaseRate = 25;
 
   int[] fftValue = new int[4];
@@ -35,7 +35,6 @@ class AudioFile {
   }
 
   // methods to use the audio file
-
   void play() {
     this.audio.play();
   }
@@ -49,47 +48,47 @@ class AudioFile {
     this.fft.forward(this.audio.mix);
   }
 
+  //function to calculate and return 4 datapoints in song
   int[] addData() {
 
     oldScoreLow = scoreLow;
     oldScoreMid = scoreMid;
     oldScoreHi = scoreHi;
-
-
     scoreLow = 0;
     scoreMid = 0;
     scoreHi = 0;
 
+    ////get the data from the fft bands
     for (int i = 0; i < fft.specSize()*specLow; i++)
     {
       scoreLow += fft.getBand(i);
     }
-
     for (int i = (int)(fft.specSize()*specLow); i < fft.specSize()*specMid; i++)
     {
       scoreMid += fft.getBand(i);
     }
-
     for (int i = (int)(fft.specSize()*specMid); i < fft.specSize()*specHi; i++)
     {
       scoreHi += fft.getBand(i);
     }
 
+    ////reduce scores if needed. 
     if (oldScoreLow > scoreLow) {
       scoreLow = oldScoreLow - scoreDecreaseRate;
     }
-
     if (oldScoreMid > scoreMid) {
       scoreMid = oldScoreMid - scoreDecreaseRate;
     }
-
     if (oldScoreHi > scoreHi) {
       scoreHi = oldScoreHi - scoreDecreaseRate;
     }
 
+    ////calculate global
     scoreGlobal = (scoreLow + scoreMid + scoreHi)/3; //alse this happens quite often, get the intialization outside the loop?
 
-    //This and down probably could be done nicer without needing two arrays. 
+    //!do we need a something factor?
+
+    //!This and down probably could be done nicer without needing two arrays. 
     dataStore[0]=log(sqrt(scoreLow))/log(2);
     dataStore[1]=log(sqrt(scoreMid))/log(2);
     dataStore[2]=log(sqrt(scoreHi))/log(2);
