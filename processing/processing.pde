@@ -14,9 +14,6 @@ AudioFile[] instruments;
 // array of folders, so we can change the folder dinamically
 String[] folderNames;
 
-// spotify urls to retrieve the data
-String beethoven = "3DNRdudZ2SstnDCVKFdXxG";
-
 // function to retrieve files from the data/jazz folder (change accordingly)
 String[] getAudioFilesList(String folderStr) {
   java.io.File folder = new java.io.File(dataPath(folderStr));
@@ -35,8 +32,6 @@ void setup() {
 
   frameRate(600); //makes it as fast as possible
 
-  // start spotify and get refreshed token
-  setupSpotify();
 
   // set up which folders we add to load the songs
   folderNames = new String[]{"acdc/", "queen/", "beatles/", "bowie/"};
@@ -69,7 +64,7 @@ void setup() {
 
   // create a song for each file and put into array
   for (int i = 0; i < files.length; i++) {
-    instruments[i] = new AudioFile(song + files[i], beethoven);
+    instruments[i] = new AudioFile(song + files[i]);
   }
 
   // For this array, there are methods to get the data. Some examples:

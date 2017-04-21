@@ -1,6 +1,5 @@
 class AudioFile {
   private String location;
-  private String spotifyUrl;
   //String dataPath = "./data/adventure/"; //<--- we should make this dependend. 
   ArrayList<FloatList> fftData;
 
@@ -28,9 +27,8 @@ class AudioFile {
   int bands = 512;
 
   // constructor
-  AudioFile(String location, String spotifyUrl) {
+  AudioFile(String location) {
     this.location = location;
-    this.spotifyUrl = spotifyUrl;
     this.minim = new Minim(processing.this);
     this.fftData = new ArrayList<FloatList>();
   }
@@ -110,16 +108,8 @@ class AudioFile {
     this.location = location;
   }
 
-  void setSpotifyUrl(String url) {
-    spotifyUrl = url;
-  }
-
   // getters
   String getLocation() {
     return this.location;
-  }
-
-  String getUrl() {
-    return this.spotifyUrl;
   }
 }
