@@ -2,7 +2,6 @@ import processing.net.*; //communicate with unity
 import processing.serial.*; //communicate arduino
 import ddf.minim.*; //sound playing
 import ddf.minim.analysis.*; //sound analyses
-import http.requests.*; // Library for HTTP requests: https://github.com/runemadsen/HTTP-Requests-for-Processing
 
 //Connection to Arduino & Unity
 Serial myPort;
@@ -21,8 +20,8 @@ String[] getAudioFilesList(String folderStr) {
   return folder.list();
 }
 
-int[] sendData; //<--- change to number of outputs. 
-int[] newData = new int[5]; //<--- how many instances do we have per instrument? Is 5 good? Should this change?
+int[] sendData;
+int[] newData = new int[4];
 
 int port = 5204;
 
@@ -38,22 +37,22 @@ void setup() {
 
   // take data from server 
   Client thisClient = myServer.available();
-  
+
   while (thisClient == null) {
     delay(10);
     thisClient = myServer.available();
     println("Client unavailable"+"\t"+millis());
   }   
 
+  //get song number from client
   String whatClientSaid = thisClient.readString();
-  if (whatClientSaid != null) {
-    println(whatClientSaid);
-  } 
-  int test = Integer.parseInt(trim(whatClientSaid));
-  println(test);
-  String song = folderNames[test];
+  int songNumber = Integer.parseInt(trim(whatClientSaid));
+  println(songNumber);
+  
+  //select corresponding song folder
+  String song = folderNames[songNumber];
 
-  // load songs from folder into an array
+  // load instruments from folder into an array
   String[] files = getAudioFilesList(song);
 
   // Create as many instrument files as the number of audio files in the folder
@@ -69,29 +68,32 @@ void setup() {
 
   // For this array, there are methods to get the data. Some examples:
   //   instruments[i].getLocation(); --> get filename of the song
-  //   instruments[i].getUrl(); --> get spotify ID
 
   // prepare all songs' FFT
   for (int i = 0; i < instruments.length; i++) {
     instruments[i].startFFT();
   }
 
-  // play all of 'em
+  delay(1); //we need to change this delay to sync with phone. 
+
+  //play all instruments. 
   for (int i = 0; i < instruments.length; i++) {
     instruments[i].play();
   }
+  
+  // connect to arduino
   //printArray(Serial.list());
   // myPort = new Serial(this, Serial.list()[0], 115200);
 }
 
 void draw() {
-
-  // move forward all songs' FFT
+  // analyze songs
   for (int i = 0; i < instruments.length; i++) {
     instruments[i].getSpectrum();
   }
   delay(2); //some delay, otherwise things fuck up
 
+  //format data
   for (int i = 0; i < instruments.length; i++) { //<--- can we do this in the class itself and save it into a global array?
     newData=instruments[i].addData(); //things we get from each instrument
     sendData[i*4+0]=newData[0]; //save it to one long array for sending 
@@ -100,11 +102,11 @@ void draw() {
     sendData[i*4+3]=newData[3];
   }
 
+  //send data
   for (int i=0; i<sendData.length; i++) {
     //  myPort.write(sendData[i]);  //send everything to the arduino
-    myServer.write(sendData[i]); //actually send all the data to the server
   }
 
-  println(sendData);
+  //println(sendData);
   delay(2); //some delay, otherwise things fuck up
 }

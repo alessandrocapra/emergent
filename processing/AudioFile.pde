@@ -15,6 +15,7 @@ class AudioFile {
   float oldScoreLow = scoreLow;
   float oldScoreMid = scoreMid;
   float oldScoreHi = scoreHi;
+  
   float scoreDecreaseRate = 25;
 
   int[] fftValue = new int[4];
