@@ -73,7 +73,7 @@ void setup() {
     instruments[i].startFFT();
   }
 
-  delay(1); //!we need to change this delay to sync with phone. 
+  //delay(5000); //!we need to change this delay to sync with phone. 
 
   //play all instruments. 
   for (int i = 0; i < instruments.length; i++) {

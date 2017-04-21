@@ -35,8 +35,10 @@ class AudioFile {
   }
 
   // methods to use the audio file
+  int startTime=millis(); //in order to not get echos
   void play() {
-    this.audio.play();
+    int playTime=millis()-startTime;
+    this.audio.play(playTime);
   }
 
   void startFFT() {
