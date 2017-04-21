@@ -20,17 +20,18 @@ String[] getAudioFilesList(String folderStr) {
   return folder.list();
 }
 
+//arrays for sending data to arduino. 
 int[] sendData;
 int[] newData = new int[4];
 
-int port = 5204;
+//which port we open our server for unity
+int port = 5204; 
 
 void setup() {
 
   myServer = new Server(this, port);
 
-  frameRate(600); //makes it as fast as possible
-
+  frameRate(600); //makes this sketch run as fast as possible
 
   // set up which folders we add to load the songs
   folderNames = new String[]{"acdc/", "queen/", "beatles/", "bowie/"};
@@ -38,6 +39,7 @@ void setup() {
   // take data from server 
   Client thisClient = myServer.available();
 
+  //wait for connection with client
   while (thisClient == null) {
     delay(10);
     thisClient = myServer.available();
@@ -61,20 +63,17 @@ void setup() {
   // for the sendData array (global one), we want 4 elements for each instrument (Low, Mid, Hi, global)
   sendData = new int[files.length*4];
 
-  // create a song for each file and put into array
+  // create a AudioFile for each file and put into array
   for (int i = 0; i < files.length; i++) {
     instruments[i] = new AudioFile(song + files[i]);
   }
-
-  // For this array, there are methods to get the data. Some examples:
-  //   instruments[i].getLocation(); --> get filename of the song
 
   // prepare all songs' FFT
   for (int i = 0; i < instruments.length; i++) {
     instruments[i].startFFT();
   }
 
-  delay(1); //we need to change this delay to sync with phone. 
+  delay(1); //!we need to change this delay to sync with phone. 
 
   //play all instruments. 
   for (int i = 0; i < instruments.length; i++) {
@@ -94,7 +93,7 @@ void draw() {
   delay(2); //some delay, otherwise things fuck up
 
   //format data
-  for (int i = 0; i < instruments.length; i++) { //<--- can we do this in the class itself and save it into a global array?
+  for (int i = 0; i < instruments.length; i++) { //!can we do this in the class itself and save it into a global array?
     newData=instruments[i].addData(); //things we get from each instrument
     sendData[i*4+0]=newData[0]; //save it to one long array for sending 
     sendData[i*4+1]=newData[1];

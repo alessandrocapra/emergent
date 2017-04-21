@@ -25,7 +25,7 @@ class AudioFile {
   AudioPlayer audio;
   Minim minim;
   FFT fft;
-  int bands = 512;
+  int bands = 512; //should be power of 2 (either 512 or 1024 is probably best)
 
   // constructor
   AudioFile(String location) {
@@ -86,7 +86,7 @@ class AudioFile {
     ////calculate global
     scoreGlobal = (scoreLow + scoreMid + scoreHi)/3; //alse this happens quite often, get the intialization outside the loop?
 
-    //!do we need a something factor?
+    //!do we need smoothing?
 
     //!This and down probably could be done nicer without needing two arrays. 
     dataStore[0]=log(sqrt(scoreLow))/log(2);
