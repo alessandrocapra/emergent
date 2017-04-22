@@ -23,6 +23,8 @@ String[] getAudioFilesList(String folderStr) {
 //arrays for sending data to arduino. 
 int[] sendData;
 int[] newData = new int[4];
+int handShake = 0;
+int previousHandShake=99;
 
 //which port we open our server for unity
 int port = 5204; 
@@ -34,23 +36,25 @@ void setup() {
   frameRate(600); //makes this sketch run as fast as possible
 
   // set up which folders we add to load the songs
-  folderNames = new String[]{"acdc/", "queen/", "beatles/", "bowie/"};
+  folderNames = new String[]{"acdc/", "queen/", "beatles/", "bowie/", "test/"};
 
   // take data from server 
   Client thisClient = myServer.available();
 
   //wait for connection with client
-  while (thisClient == null) {
-    delay(10);
-    thisClient = myServer.available();
-    println("Client unavailable"+"\t"+millis());
-  }   
+  //while (thisClient == null) {
+  //  delay(10);
+  //  thisClient = myServer.available();
+  //  println("Client unavailable"+"\t"+millis());
+  //}   
 
   //get song number from client
-  String whatClientSaid = thisClient.readString();
-  int songNumber = Integer.parseInt(trim(whatClientSaid));
-  println(songNumber);
-  
+  //String whatClientSaid = thisClient.readString();
+  //int songNumber = Integer.parseInt(trim(whatClientSaid));
+  //println(songNumber);
+
+  int songNumber=0;
+
   //select corresponding song folder
   String song = folderNames[songNumber];
 
@@ -66,7 +70,9 @@ void setup() {
   // create a AudioFile for each file and put into array
   for (int i = 0; i < files.length; i++) {
     instruments[i] = new AudioFile(song + files[i]);
+    print(files[i]);
   }
+
 
   // prepare all songs' FFT
   for (int i = 0; i < instruments.length; i++) {
@@ -79,10 +85,11 @@ void setup() {
   for (int i = 0; i < instruments.length; i++) {
     instruments[i].play();
   }
-  
+
   // connect to arduino
-  //printArray(Serial.list());
-  // myPort = new Serial(this, Serial.list()[0], 115200);
+  printArray(Serial.list());
+  myPort = new Serial(this, Serial.list()[0], 115200);
+  handShake=99;
 }
 
 void draw() {
@@ -101,10 +108,20 @@ void draw() {
     sendData[i*4+3]=newData[3];
   }
 
-  //send data
+  //send data and wait for signal to get more
+  
   for (int i=0; i<sendData.length; i++) {
-    //  myPort.write(sendData[i]);  //send everything to the arduino
+    if (myPort.available() > 0) {
+      handShake=myPort.read();
+    }
+    if (previousHandShake != handShake) {
+      myPort.clear();
+      println("handshake received"+"\t"+handShake+"\t"+sendData[handShake]);
+      myPort.write(sendData[handShake]);
+      previousHandShake=handShake;
+    }
   }
+
 
   //println(sendData);
   delay(2); //some delay, otherwise things fuck up

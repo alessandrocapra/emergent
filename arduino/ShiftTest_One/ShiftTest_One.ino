@@ -33,7 +33,7 @@ const bool ShiftPWM_balanceLoad = false;
 
 unsigned char maxBrightness = 255;
 unsigned char pwmFrequency = 75;
-int numRegisters = 1;
+int numRegisters = 4;
 
 void setup() {
   Serial.begin(9600);
