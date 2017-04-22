@@ -34,7 +34,7 @@ void loop()
       data[i] = incomingByte;
       i++;
     }
-    delay(2);
+    //delay(2);
   }
 
   for (int motor = 0; motor < 32; motor++) {

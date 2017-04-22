@@ -53,7 +53,7 @@ void setup() {
   //int songNumber = Integer.parseInt(trim(whatClientSaid));
   //println(songNumber);
 
-  int songNumber=0;
+  int songNumber=3;
 
   //select corresponding song folder
   String song = folderNames[songNumber];
@@ -97,7 +97,7 @@ void draw() {
   for (int i = 0; i < instruments.length; i++) {
     instruments[i].getSpectrum();
   }
-  delay(2); //some delay, otherwise things fuck up
+  //delay(2); //some delay, otherwise things fuck up
 
   //format data
   for (int i = 0; i < instruments.length; i++) { //!can we do this in the class itself and save it into a global array?
@@ -124,5 +124,5 @@ void draw() {
 
 
   //println(sendData);
-  delay(2); //some delay, otherwise things fuck up
+  //delay(2); //some delay, otherwise things fuck up
 }
