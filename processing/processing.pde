@@ -58,7 +58,7 @@ void setup() {
   int songNumber = Integer.parseInt(songNumberString);
   modeNumber=Integer.parseInt(modeNumberString);
 
-  //songNumber = 2;
+  //songNumber = 0;
   //modeNumber = 0;
 
 
@@ -88,7 +88,7 @@ void setup() {
     instruments[i].startFFT();
   }
 
-  delay(8480); //!we need to change this delay to sync with phone. 
+  //delay(8480); //!we need to change this delay to sync with phone. 
 
   //play all instruments. 
   for (int i = 0; i < instruments.length; i++) {
