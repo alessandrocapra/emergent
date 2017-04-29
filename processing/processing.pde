@@ -39,27 +39,27 @@ void setup() {
   frameRate(600); //makes this sketch run as fast as possible
 
   // set up which folders we add to load the songs
-  folderNames = new String[]{"acdc/", "queen/", "beatles/", "bowie/", "test/"};
+  folderNames = new String[]{"bowie/", "beatles/", "acdc/", "queen/"};
 
   // take data from server 
   Client thisClient = myServer.available();
 
-  ////wait for connection with client
-  //while (thisClient == null) {
-  //  delay(10);
-  //  thisClient = myServer.available();
-  //  println("Client unavailable"+"\t"+millis());
-  //}   
+  //wait for connection with client
+  while (thisClient == null) {
+    delay(10);
+    thisClient = myServer.available();
+    println("Client unavailable"+"\t"+millis());
+  }   
 
-  //String whatClientSaid = trim(thisClient.readString());
-  //println(whatClientSaid);
-  //String songNumberString=whatClientSaid.substring(0, 1);
-  //String modeNumberString=whatClientSaid.substring(1, 2);
-  //int songNumber = Integer.parseInt(songNumberString);
-  //modeNumber=Integer.parseInt(modeNumberString);
+  String whatClientSaid = trim(thisClient.readString());
+  println(whatClientSaid);
+  String songNumberString=whatClientSaid.substring(0, 1);
+  String modeNumberString=whatClientSaid.substring(1, 2);
+  int songNumber = Integer.parseInt(songNumberString);
+  modeNumber=Integer.parseInt(modeNumberString);
 
-  songNumber = 1;
-  modeNumber = 0;
+  //songNumber = 2;
+  //modeNumber = 0;
 
 
   println("songNumber: "+songNumber+"\t"+"modeNumber: " + modeNumber);
@@ -88,7 +88,7 @@ void setup() {
     instruments[i].startFFT();
   }
 
-  //delay(5000); //!we need to change this delay to sync with phone. 
+  delay(8480); //!we need to change this delay to sync with phone. 
 
   //play all instruments. 
   for (int i = 0; i < instruments.length; i++) {
@@ -146,5 +146,5 @@ void draw() {
     }
   }
   //println(sendData);
-  delay(2); //some delay, otherwise things fuck up
+ // delay(2); //some delay, otherwise things fuck up
 }
