@@ -4,8 +4,8 @@ class AudioFile {
   ArrayList<FloatList> fftData;
 
   float specLow = 0.03; //maybe initialize this when we intilize the instance? This is looped quite often now. 
-  float specMid = 0.125;
-  float specHi = 0.20;
+  float specMid = 0.10;
+  float specHi = 0.15;
 
   float scoreLow = 0;
   float scoreMid = 0;
@@ -102,6 +102,12 @@ class AudioFile {
       }
       fftValue[i]=int(map(dataStore[i], 0, 6, 0, 254));
     }  
+
+    for (int i=0; i<fftValue.length; i++) { //create threshold. Below 5 is almost nothing, so make it really nothing to make vibrations clearer. 
+      if (fftValue[i]<5) {
+        fftValue[i]=0;
+      }
+    }
     return fftValue;
   }
 
