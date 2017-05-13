@@ -59,7 +59,7 @@ void setup() {
   modeNumber=Integer.parseInt(modeNumberString);
 
   //songNumber = 0;
-  //modeNumber = 0;
+  //modeNumber = 1;
 
 
   println("songNumber: "+songNumber+"\t"+"modeNumber: " + modeNumber);
@@ -88,7 +88,7 @@ void setup() {
     instruments[i].startFFT();
   }
 
-  //delay(8480); //!we need to change this delay to sync with phone. 
+  delay(8480); //!we need to change this delay to sync with phone. 
 
   //play all instruments. 
   for (int i = 0; i < instruments.length; i++) {
@@ -97,7 +97,7 @@ void setup() {
 
   // connect to arduino
   printArray(Serial.list());
-  myPort = new Serial(this, Serial.list()[0], 115200);
+  myPort = new Serial(this, Serial.list()[1], 115200);
   handShake=99;
 }
 
